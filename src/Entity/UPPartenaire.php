@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UPPartenaireRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -64,6 +66,17 @@ class UPPartenaire
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $ice = null;
+
+    /**
+     * @var Collection<int, DemandeStockCab>
+     */
+    #[ORM\OneToMany(targetEntity: DemandeStockCab::class, mappedBy: 'client')]
+    private Collection $demandeStockCabs;
+
+    public function __construct()
+    {
+        $this->demandeStockCabs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -270,6 +283,36 @@ class UPPartenaire
     public function setIce(?string $ice): static
     {
         $this->ice = $ice;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DemandeStockCab>
+     */
+    public function getDemandeStockCabs(): Collection
+    {
+        return $this->demandeStockCabs;
+    }
+
+    public function addDemandeStockCab(DemandeStockCab $demandeStockCab): static
+    {
+        if (!$this->demandeStockCabs->contains($demandeStockCab)) {
+            $this->demandeStockCabs->add($demandeStockCab);
+            $demandeStockCab->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDemandeStockCab(DemandeStockCab $demandeStockCab): static
+    {
+        if ($this->demandeStockCabs->removeElement($demandeStockCab)) {
+            // set the owning side to null (unless already changed)
+            if ($demandeStockCab->getClient() === $this) {
+                $demandeStockCab->setClient(null);
+            }
+        }
 
         return $this;
     }

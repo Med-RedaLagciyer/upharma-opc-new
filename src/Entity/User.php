@@ -54,8 +54,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: UsOperation::class, mappedBy: 'user')]
     private Collection $operations;
 
+    /**
+     * @var Collection<int, LivraisonStockCab>
+     */
+    #[ORM\OneToMany(targetEntity: LivraisonStockCab::class, mappedBy: 'userCreated')]
+    private Collection $livraisonStockCabs;
+
     public function __construct()
     {
+        $this->livraisonStockCabs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -215,6 +222,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->operations->removeElement($operation)) {
             $operation->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LivraisonStockCab>
+     */
+    public function getLivraisonStockCabs(): Collection
+    {
+        return $this->livraisonStockCabs;
+    }
+
+    public function addLivraisonStockCab(LivraisonStockCab $livraisonStockCab): static
+    {
+        if (!$this->livraisonStockCabs->contains($livraisonStockCab)) {
+            $this->livraisonStockCabs->add($livraisonStockCab);
+            $livraisonStockCab->setUserCreated($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivraisonStockCab(LivraisonStockCab $livraisonStockCab): static
+    {
+        if ($this->livraisonStockCabs->removeElement($livraisonStockCab)) {
+            // set the owning side to null (unless already changed)
+            if ($livraisonStockCab->getUserCreated() === $this) {
+                $livraisonStockCab->setUserCreated(null);
+            }
         }
 
         return $this;

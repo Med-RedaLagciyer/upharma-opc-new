@@ -68,7 +68,6 @@ class UsersController extends AbstractController
 
         $queryBuilder = $this->em->createQueryBuilder()
             ->select('u.id, u.username, u.nom, u.prenom, u.email, u.roles, u.created, u.enable')
-            ->andWhere('u.etudiant is null')
             ->from(User::class, 'u');
         if (!empty($search)) {
             $queryBuilder->andWhere('(u.username LIKE :search OR u.nom LIKE :search OR u.prenom LIKE :search OR u.email LIKE :search OR u.created LIKE :search OR u.roles LIKE :search OR u.created LIKE :search)')
