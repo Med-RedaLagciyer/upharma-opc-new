@@ -1,0 +1,47 @@
+<div class="modal fade" id="privilegeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-slideout" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title align-right" id="exampleModalLabel">Privilége</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="privilegeBody">
+				<div class="privilege">
+					<ul>
+						<span><input type="checkbox" class="tous"/>
+							Tous</span>
+						<div class="privilege__list">
+							{% for module in modules %}
+								<li>
+									<h4 class="Collapsable modules">
+										<input type="checkbox" data-id="{{module.id}}" class="inputModule"/>
+										{{module.designation}}</h4>
+									<ul style="display:none">
+										{% for sousModule in module.sousModules %}
+											<li>
+												<span class="Collapsable sousModules" style="font-size:14px"><input type="checkbox" data-module="{{sousModule.id}}" class="inputSousModule"/>
+													{{sousModule.designation}}</span>
+												<ul style="display:none" class="listOfButtons">
+													{% for operation in sousModule.operations %}
+														<li>
+															<span class="Collapsable buttons">
+																<input type="checkbox" class="{{operation.id}} inputOperation" data-operation="{{operation.id}}"/>
+																{{operation.designation}}</span>
+														</li>
+													{% endfor %}
+												</ul>
+											</li>
+										{% endfor %}
+
+									</ul>
+								</li>
+							{% endfor %}
+						</div>
+
+					</ul>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

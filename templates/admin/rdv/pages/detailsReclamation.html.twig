@@ -1,0 +1,57 @@
+<div class="row row-cards">
+	<div class="hr-text" style="margin: 20px 0 6px 0 !important;">Informations Etudiant</div>
+	<div class="col-md-4">
+		<label class="form-label">Nom Etudiant</label>
+		<input required name="nom" id="nom" type="text" class="form-control" placeholder="Nom" disabled value="{{rendezvous.inscription.admission.preinscription.etudiant.nom}}">
+	</div>
+	<div class="col-md-4">
+		<label class="form-label">Prenom Etudiant</label>
+		<input required name="prenom" id="prenom" type="text" class="form-control" placeholder="Prenom" disabled value="{{rendezvous.inscription.admission.preinscription.etudiant.prenom}}">
+	</div>
+	<div class="col-md-4">
+		<label class="form-label">Code Admission</label>
+		<input required name="prenom" id="prenom" type="text" class="form-control" placeholder="Prenom" disabled value="{{rendezvous.inscription.admission.code}}">
+	</div>
+	<div class="hr-text" style="margin: 20px 0 6px 0 !important;">Informations Rendz-vous</div>
+	<div class="col-md-6">
+		<label class="form-label">Nom Patient</label>
+		<input required name="nom" id="nom" type="text" class="form-control" placeholder="Nom" disabled value="{{rendezvous.patient.nom}}">
+	</div>
+	<div class="col-md-6">
+		<label class="form-label">Prenom Patient</label>
+		<input required name="prenom" id="prenom" type="text" class="form-control" placeholder="Prenom" disabled value="{{rendezvous.patient.prenom}}">
+	</div>
+	<div class="col-md-6">
+		<label class="form-label">CIN Patient</label>
+		<input required name="cin" id="cin" type="text" class="form-control" placeholder="CIN" disabled value="{{rendezvous.patient.cin}}">
+	</div>
+	<div class="col-md-6">
+		<label class="form-label">IPP Patient</label>
+		<input required name="ipp" id="ipp" type="text" class="form-control" placeholder="IPP" disabled value="{{rendezvous.patient.ipp}}">
+	</div>
+	<div class="col-md-6">
+		<label class="form-label">TEL Patient</label>
+		<input required name="tel" id="tel" type="text" class="form-control" placeholder="TEL" disabled value="{{rendezvous.patient.tel}}">
+	</div>
+
+	<div class="col-md-6">
+		<label class="form-label">Date rendez-vous</label>
+		<input required name="date" id="date" type="datetime-local" class="form-control datepicker" disabled value="{{ rendezvous.date|date('Y-m-d\\TH:i') }}">
+	</div>
+
+	<div class="col-md-6">
+		<label class="form-label">Date rendez-vous</label>
+		<input required name="date" id="date" type="datetime-local" class="form-control datepicker" disabled value="{{ rendezvous.date|date('Y-m-d\\TH:i') }}">
+	</div>
+	<div class="hr-text" style="margin: 20px 0 6px 0 !important;">List des actes</div>
+	<div class="col-md-12">
+		<ol style="padding-left: 3.5rem;padding-right: 3.5rem;">
+			{% for act in rendezvous.actes %}
+				<li>
+					{{act.designation}}
+				</li>
+			{% endfor %}
+		</ol>
+
+	</div>
+</div>
