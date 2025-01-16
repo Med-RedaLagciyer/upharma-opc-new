@@ -2,39 +2,39 @@
 
 namespace App\Repository;
 
-use App\Entity\Parametrage;
+use App\Entity\LivraisonStockDet;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Parametrage>
+ * @extends ServiceEntityRepository<LivraisonStockDet>
  */
-class ParametrageRepository extends ServiceEntityRepository
+class LivraisonStockDetRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Parametrage::class);
+        parent::__construct($registry, LivraisonStockDet::class);
     }
 
     //    /**
-    //     * @return Parametrage[] Returns an array of Parametrage objects
+    //     * @return LivraisonStockDet[] Returns an array of LivraisonStockDet objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
+    //        return $this->createQueryBuilder('l')
+    //            ->andWhere('l.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
+    //            ->orderBy('l.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Parametrage
+    //    public function findOneBySomeField($value): ?LivraisonStockDet
     //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
+    //        return $this->createQueryBuilder('l')
+    //            ->andWhere('l.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()

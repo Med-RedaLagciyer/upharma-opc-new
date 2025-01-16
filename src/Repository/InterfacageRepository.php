@@ -2,39 +2,39 @@
 
 namespace App\Repository;
 
-use App\Entity\Act;
+use App\Entity\Interfacage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Act>
+ * @extends ServiceEntityRepository<Interfacage>
  */
-class ActRepository extends ServiceEntityRepository
+class InterfacageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Act::class);
+        parent::__construct($registry, Interfacage::class);
     }
 
     //    /**
-    //     * @return Act[] Returns an array of Act objects
+    //     * @return Interfacage[] Returns an array of Interfacage objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
+    //        return $this->createQueryBuilder('i')
+    //            ->andWhere('i.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
+    //            ->orderBy('i.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Act
+    //    public function findOneBySomeField($value): ?Interfacage
     //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
+    //        return $this->createQueryBuilder('i')
+    //            ->andWhere('i.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()
