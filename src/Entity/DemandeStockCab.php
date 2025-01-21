@@ -79,6 +79,12 @@ class DemandeStockCab
     #[ORM\OneToMany(targetEntity: LivraisonStockCab::class, mappedBy: 'demande')]
     private Collection $livraisonStockCabs;
 
+    #[ORM\ManyToOne(inversedBy: 'demandeStockCabs')]
+    private ?UAntenne $antenneDemandeur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'demandeStockCabs')]
+    private ?UAntenne $antenne = null;
+
     public function __construct()
     {
         $this->demandeStockDets = new ArrayCollection();
@@ -350,6 +356,30 @@ class DemandeStockCab
                 $livraisonStockCab->setDemande(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAntenneDemandeur(): ?UAntenne
+    {
+        return $this->antenneDemandeur;
+    }
+
+    public function setAntenneDemandeur(?UAntenne $antenneDemandeur): static
+    {
+        $this->antenneDemandeur = $antenneDemandeur;
+
+        return $this;
+    }
+
+    public function getAntenne(): ?UAntenne
+    {
+        return $this->antenne;
+    }
+
+    public function setAntenne(?UAntenne $antenne): static
+    {
+        $this->antenne = $antenne;
 
         return $this;
     }

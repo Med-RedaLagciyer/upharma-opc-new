@@ -40,4 +40,18 @@ class LivraisonStockCabRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findPositionByTheSameDemande($livraison): array
+       {
+           return $this->createQueryBuilder('l')
+               ->innerJoin('l.demande', 'demande')
+               ->innerJoin('l.position', 'position')
+               ->andWhere('demande.id = :id_demande')
+               ->andWhere('l.id != :id_livraison')
+               ->setParameter('id_livraison', $livraison->getId())
+               ->setParameter('id_demande', $livraison->getDemande()->getId())
+               ->orderBy('l.id', 'ASC')
+               ->getQuery()
+               ->getResult()
+           ;
+       }
 }

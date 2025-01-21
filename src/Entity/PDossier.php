@@ -49,9 +49,16 @@ class PDossier
     #[ORM\OneToMany(targetEntity: DemandeStockCab::class, mappedBy: 'demandeur')]
     private Collection $demandeStockCabs;
 
+    /**
+     * @var Collection<int, UDepot>
+     */
+    #[ORM\OneToMany(targetEntity: UDepot::class, mappedBy: 'dossier')]
+    private Collection $uDepots;
+
     public function __construct()
     {
         $this->demandeStockCabs = new ArrayCollection();
+        $this->uDepots = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,6 +198,36 @@ class PDossier
             // set the owning side to null (unless already changed)
             if ($demandeStockCab->getDemandeur() === $this) {
                 $demandeStockCab->setDemandeur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UDepot>
+     */
+    public function getUDepots(): Collection
+    {
+        return $this->uDepots;
+    }
+
+    public function addUDepot(UDepot $uDepot): static
+    {
+        if (!$this->uDepots->contains($uDepot)) {
+            $this->uDepots->add($uDepot);
+            $uDepot->setDossier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUDepot(UDepot $uDepot): static
+    {
+        if ($this->uDepots->removeElement($uDepot)) {
+            // set the owning side to null (unless already changed)
+            if ($uDepot->getDossier() === $this) {
+                $uDepot->setDossier(null);
             }
         }
 

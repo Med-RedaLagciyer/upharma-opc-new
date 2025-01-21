@@ -25,7 +25,9 @@ Encore.addPlugin(new FosRouting())
   .addEntry("security_register", "./assets/components/security_register.js")
   .addEntry("synchronisation", "./assets/components/admin/parametrage/sync.js")
   .addEntry("admin_users", "./assets/components/admin/parametrage/users.js")
-  .addEntry("etudiant_rdv", "./assets/components/etudiant/rdv.js")
+  .addEntry("pharmacy_liv_cree", "./assets/components/pharmacy/livraisonCree.js")
+  .addEntry("pharmacy_liv_envoye", "./assets/components/pharmacy/livraisonEnvoye.js")
+  .addEntry("pharmacy_liv_confirme", "./assets/components/pharmacy/livraisonConfirme.js")
   .addEntry("admin_rdv", "./assets/components/admin/rdv.js")
 
   // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

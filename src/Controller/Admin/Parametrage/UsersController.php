@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\Parametrage;
 
 use DateTime;
 use Mpdf\Mpdf;
@@ -91,7 +91,6 @@ class UsersController extends AbstractController
         $totalRecords = $this->em->createQueryBuilder()
             ->select('COUNT(u.id)')
             ->from(User::class, 'u')
-            ->andWhere('u.etudiant is null')
             ->getQuery()
             ->getSingleScalarResult();
 
