@@ -33,8 +33,8 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('app_login');
         } elseif (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
             return $this->redirectToRoute('app_redirect');
-        } elseif (in_array('ROLE_ETUDIANT', $this->getUser()->getRoles())) {
-            return $this->redirectToRoute('app_etudiant_rdv_listing');
+        } elseif (in_array('ROLE_USER', $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_redirect');
         }
 
         return $this->render('errors/access_denied.html.twig');

@@ -27,18 +27,12 @@ class LivraisonStockDet
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $observation = null;
 
-    /**
-     * @var Collection<int, LivraisonStockDetails>
-     */
-    #[ORM\OneToMany(targetEntity: LivraisonStockDetails::class, mappedBy: 'livraisonDet')]
-    private Collection $livraisonStockDetails;
-
     #[ORM\Column(nullable: true)]
     private ?int $idAccess = null;
 
     public function __construct()
     {
-        $this->livraisonStockDetails = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -90,36 +84,6 @@ class LivraisonStockDet
     public function setObservation(?string $observation): static
     {
         $this->observation = $observation;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, LivraisonStockDetails>
-     */
-    public function getLivraisonStockDetails(): Collection
-    {
-        return $this->livraisonStockDetails;
-    }
-
-    public function addLivraisonStockDetail(LivraisonStockDetails $livraisonStockDetail): static
-    {
-        if (!$this->livraisonStockDetails->contains($livraisonStockDetail)) {
-            $this->livraisonStockDetails->add($livraisonStockDetail);
-            $livraisonStockDetail->setLivraisonDet($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLivraisonStockDetail(LivraisonStockDetails $livraisonStockDetail): static
-    {
-        if ($this->livraisonStockDetails->removeElement($livraisonStockDetail)) {
-            // set the owning side to null (unless already changed)
-            if ($livraisonStockDetail->getLivraisonDet() === $this) {
-                $livraisonStockDetail->setLivraisonDet(null);
-            }
-        }
 
         return $this;
     }

@@ -63,6 +63,10 @@ th {
   text-align: center;
 }
 
+.navbar .dropdown-item{
+    font-size: 11px !important;
+}
+
 .actions .dropdown-item:hover {
   background: rgb(210, 210, 210);
 }
@@ -264,7 +268,7 @@ button {
   display: none;
 }
 
-// display files 
+// display files
 .file-block {
   display: flex;
   color: #f7fff7;

@@ -19,9 +19,6 @@ class LivraisonStockCab
     #[ORM\ManyToOne(inversedBy: 'livraisonStockCabs')]
     private ?DemandeStockCab $demande = null;
 
-    #[ORM\ManyToOne(inversedBy: 'livraisonStockCabs')]
-    private ?DemandeStatus $status = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $code = null;
 
@@ -56,6 +53,12 @@ class LivraisonStockCab
     private ?bool $valide = null;
 
     /**
+     * @var Collection<int, LivraisonStockLot>
+     */
+    #[ORM\OneToMany(targetEntity: LivraisonStockLot::class, mappedBy: 'livraison')]
+    private Collection $livraisonStockLot;
+
+    /**
      * @var Collection<int, LivraisonStockDet>
      */
     #[ORM\OneToMany(targetEntity: LivraisonStockDet::class, mappedBy: 'livraison')]
@@ -64,9 +67,32 @@ class LivraisonStockCab
     #[ORM\Column(nullable: true)]
     private ?int $idAccess = null;
 
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'livraisonStockCabs')]
+    private ?self $idReference = null;
+
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'idReference')]
+    private Collection $livraisonStockCabs;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $etat = null;
+
+    #[ORM\ManyToOne(inversedBy: 'livraisonStockCabs')]
+    private ?ListPosition $position = null;
+
+    #[ORM\ManyToOne(inversedBy: 'livraisonStockCabs')]
+    private ?ListPosition $positionHistorique = null;
+
+    #[ORM\ManyToOne(inversedBy: 'livraisonStockCabs')]
+    private ?LivraisonStatus $status = null;
+
     public function __construct()
     {
         $this->livraisonStockDets = new ArrayCollection();
+        $this->livraisonStockCabs = new ArrayCollection();
+        $this->livraisonStockLot = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,18 +108,6 @@ class LivraisonStockCab
     public function setDemande(?DemandeStockCab $demande): static
     {
         $this->demande = $demande;
-
-        return $this;
-    }
-
-    public function getStatus(): ?DemandeStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(?DemandeStatus $status): static
-    {
-        $this->status = $status;
 
         return $this;
     }
@@ -268,6 +282,126 @@ class LivraisonStockCab
     public function setIdAccess(?int $idAccess): static
     {
         $this->idAccess = $idAccess;
+
+        return $this;
+    }
+
+    public function getIdReference(): ?self
+    {
+        return $this->idReference;
+    }
+
+    public function setIdReference(?self $idReference): static
+    {
+        $this->idReference = $idReference;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getLivraisonStockCabs(): Collection
+    {
+        return $this->livraisonStockCabs;
+    }
+
+    public function addLivraisonStockCab(self $livraisonStockCab): static
+    {
+        if (!$this->livraisonStockCabs->contains($livraisonStockCab)) {
+            $this->livraisonStockCabs->add($livraisonStockCab);
+            $livraisonStockCab->setIdReference($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivraisonStockCab(self $livraisonStockCab): static
+    {
+        if ($this->livraisonStockCabs->removeElement($livraisonStockCab)) {
+            // set the owning side to null (unless already changed)
+            if ($livraisonStockCab->getIdReference() === $this) {
+                $livraisonStockCab->setIdReference(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LivraisonStockLot>
+     */
+    public function getLivraisonStockLot(): Collection
+    {
+        return $this->livraisonStockLot;
+    }
+
+    public function addLivraisonStockLot(LivraisonStockLot $livraisonStockLot): static
+    {
+        if (!$this->livraisonStockLot->contains($livraisonStockLot)) {
+            $this->livraisonStockLot->add($livraisonStockLot);
+            $livraisonStockLot->setLivraisonCab($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivraisonStockLot(LivraisonStockLot $livraisonStockLot): static
+    {
+        if ($this->livraisonStockLot->removeElement($livraisonStockLot)) {
+            // set the owning side to null (unless already changed)
+            if ($livraisonStockLot->getLivraisonCab() === $this) {
+                $livraisonStockLot->setLivraisonCab(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?string $etat): static
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getPosition(): ?ListPosition
+    {
+        return $this->position;
+    }
+
+    public function setPosition(?ListPosition $position): static
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    public function getPositionHistorique(): ?ListPosition
+    {
+        return $this->positionHistorique;
+    }
+
+    public function setPositionHistorique(?ListPosition $positionHistorique): static
+    {
+        $this->positionHistorique = $positionHistorique;
+
+        return $this;
+    }
+
+    public function getStatus(): ?LivraisonStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?LivraisonStatus $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

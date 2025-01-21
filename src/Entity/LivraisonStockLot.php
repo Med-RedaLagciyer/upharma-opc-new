@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\LivraisonStockDetailsRepository;
+use App\Repository\LivraisonStockLotRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: LivraisonStockDetailsRepository::class)]
-class LivraisonStockDetails
+#[ORM\Entity(repositoryClass: LivraisonStockLotRepository::class)]
+class LivraisonStockLot
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -50,8 +50,8 @@ class LivraisonStockDetails
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateSys = null;
 
-    #[ORM\ManyToOne(inversedBy: 'livraisonStockDetails')]
-    private ?LivraisonStockDet $livraisonDet = null;
+    #[ORM\ManyToOne(inversedBy: 'livraisonStockCabs')]
+    private ?LivraisonStockCab $livraisonCab = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $montant = null;
@@ -64,6 +64,9 @@ class LivraisonStockDetails
 
     #[ORM\Column(nullable: true)]
     private ?int $idAccess = null;
+
+    #[ORM\ManyToOne(inversedBy: 'livraisonStockLots')]
+    private ?PNaturePrix $naturePrix = null;
 
     public function getId(): ?int
     {
@@ -214,14 +217,14 @@ class LivraisonStockDetails
         return $this;
     }
 
-    public function getLivraisonDet(): ?LivraisonStockDet
+    public function getLivraisonCab(): ?LivraisonStockCab
     {
-        return $this->livraisonDet;
+        return $this->livraisonCab;
     }
 
-    public function setLivraisonDet(?LivraisonStockDet $livraisonDet): static
+    public function setLivraisonCab(?LivraisonStockCab $livraisonCab): static
     {
-        $this->livraisonDet = $livraisonDet;
+        $this->livraisonCab = $livraisonCab;
 
         return $this;
     }
@@ -270,6 +273,18 @@ class LivraisonStockDetails
     public function setIdAccess(?int $idAccess): static
     {
         $this->idAccess = $idAccess;
+
+        return $this;
+    }
+
+    public function getNaturePrix(): ?PNaturePrix
+    {
+        return $this->naturePrix;
+    }
+
+    public function setNaturePrix(?PNaturePrix $naturePrix): static
+    {
+        $this->naturePrix = $naturePrix;
 
         return $this;
     }

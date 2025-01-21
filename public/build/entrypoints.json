@@ -5,46 +5,60 @@
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
         "/build/351.a6119758.js",
-        "/build/app.9ac7ea24.js"
+        "/build/app.d91d5a33.js"
       ],
       "css": [
         "/build/351.8bb31a85.css",
-        "/build/app.91c47dfb.css"
+        "/build/app.ad774f24.css"
       ]
     },
     "security_register": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/security_register.3c7995b2.js"
+        "/build/security_register.574a3a7f.js"
       ]
     },
     "synchronisation": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/synchronisation.29d97358.js"
+        "/build/synchronisation.0add2e16.js"
       ]
     },
     "admin_users": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/admin_users.ef9638af.js"
+        "/build/admin_users.30da39ed.js"
       ]
     },
-    "etudiant_rdv": {
+    "pharmacy_liv_cree": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/etudiant_rdv.81ccdfaa.js"
+        "/build/pharmacy_liv_cree.87f7913c.js"
+      ]
+    },
+    "pharmacy_liv_envoye": {
+      "js": [
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/pharmacy_liv_envoye.ce5f47d9.js"
+      ]
+    },
+    "pharmacy_liv_confirme": {
+      "js": [
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/pharmacy_liv_confirme.f1b67f6a.js"
       ]
     },
     "admin_rdv": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/admin_rdv.85078586.js"
+        "/build/admin_rdv.031aa603.js"
       ]
     }
   }

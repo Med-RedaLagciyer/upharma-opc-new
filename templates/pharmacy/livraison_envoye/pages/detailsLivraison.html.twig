@@ -1,0 +1,95 @@
+<div class="row row-cards">
+	<div class="hr-text" style="margin: 20px 0 6px 0 !important;">Informations Générales</div>
+	<div class="col-md-4">
+		<label class="form-label">Code Demande: <div class="d-inline form-control-plaintext text-secondary">{{livraison.demande.code}}</div></label>
+	</div>
+
+    <div class="col-md-4">
+		<label class="form-label">Demandeur: <div class="d-inline form-control-plaintext text-secondary">{{livraison.demande.antenneDemandeur ? livraison.demande.antenneDemandeur.designation : "-"}}</div></label>
+	</div>
+
+	<div class="col-md-4">
+		<label class="form-label">Observation: <div class="d-inline form-control-plaintext text-secondary">{{livraison.demande.observation}}</div></label>
+	</div>
+
+	<div class="col-md-4">
+		<label class="form-label">Code Livraison: <div class="d-inline form-control-plaintext text-secondary">{{livraison.code}}</div></label>
+	</div>
+
+	<div class="col-md-4">
+		<label class="form-label">Récépteur: <div class="d-inline form-control-plaintext text-secondary">{{livraison.demande.antenne ? livraison.demande.antenne.designation : "-"}}</div></label>
+	</div>
+
+    <div class="hr-text" style="margin: 20px 0 6px 0 !important;">Impressions Associées</div>
+    <div class="row mt-2">
+        <div class="col-md-4">
+            <a href="#" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Impression Demande : {{livraison.demande.code}}</a>
+        </div>
+        <div class="col-md-4">
+            <a href="#" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Impression Livraison : {{livraison.code}}</a>
+        </div>
+    </div>
+
+    <div class="hr-text" style="margin: 20px 0 6px 0 !important;">Détails Livraison</div>
+
+    <table id="list_details" class="table custom-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th width="3%">#</th>
+                <th width="5%">Article</th>
+                <th width="10%">Qte demandé</th>
+                <th width="5%">Qte livé</th>
+                <th width="10%">Qte RS</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set ord = 0 %}
+        {% set qteDemande = 0 %}
+        {% for detail in livraison.livraisonStockDets  %}
+            {% set ord = ord + 1 %}
+            <tr>
+                <td width="3%">{{ord}}</td>
+                <td width="50%"><span class="truncated-text" title="{{detail.article.titre}}">{{detail.article.titre|length > 100 ? detail.article.titre|slice(0, 100) ~ '...' : detail.article.titre}}</span></td>
+                {% for demandeDet in livraison.demande.demandeStockDets %}
+                    {% if demandeDet.article.id == detail.article.id %}
+                        {% set qteDemande = demandeDet.qte %}
+                    {% endif %}
+                {% endfor %}
+                <td width="5%">{{qteDemande}}</td>
+                <td width="5%">{{detail.quantity}}</td>
+                <td width="5%">{{qteDemande - detail.quantity}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <footer class="position-absolute bottom-0 mb-5">
+        <div class="container-xl">
+            <div class="row">
+                <div class="col-md-9 float-right etatContainer">
+                    <div class="" style="float:right;margin-top: 7px;">
+                        <label class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="etatInput" id="frigorifiee" value="Séc" checked="">
+                        <span class="form-check-label">Séc</span>
+                        </label>
+                        <label class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="etatInput" id="frigorifiee" value="Frigorifiée">
+                        <span class="form-check-label">Frigorifiée</span>
+                        </label>
+                        <label class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="etatInput" id="frigorifiee" value="Frigorifiée + Séc">
+                        <span class="form-check-label">Frigorifiée + Séc</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    {% if operations|filter(o => o.id == 9)|length > 0 %}
+                        <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 ModalConfirmerLiv">
+                            <i class="fa fa-check"></i>&nbsp;
+                            Confirmer
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
