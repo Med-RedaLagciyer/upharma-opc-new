@@ -60,9 +60,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: LivraisonStockCab::class, mappedBy: 'userCreated')]
     private Collection $livraisonStockCabs;
 
+    /**
+     * @var Collection<int, BordereauxValidation>
+     */
+    #[ORM\OneToMany(targetEntity: BordereauxValidation::class, mappedBy: 'userCreated')]
+    private Collection $bordereauxValidations;
+
+    /**
+     * @var Collection<int, LivraisonStockCab>
+     */
+    #[ORM\OneToMany(targetEntity: LivraisonStockCab::class, mappedBy: 'userValider')]
+    private Collection $livraisonsValider;
+
+    /**
+     * @var Collection<int, LivraisonObservation>
+     */
+    #[ORM\OneToMany(targetEntity: LivraisonObservation::class, mappedBy: 'userCreated')]
+    private Collection $livraisonObservations;
+
     public function __construct()
     {
         $this->livraisonStockCabs = new ArrayCollection();
+        $this->bordereauxValidations = new ArrayCollection();
+        $this->livraisonsValider = new ArrayCollection();
+        $this->livraisonObservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -251,6 +272,96 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($livraisonStockCab->getUserCreated() === $this) {
                 $livraisonStockCab->setUserCreated(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BordereauxValidation>
+     */
+    public function getBordereauxValidations(): Collection
+    {
+        return $this->bordereauxValidations;
+    }
+
+    public function addBordereauxValidation(BordereauxValidation $bordereauxValidation): static
+    {
+        if (!$this->bordereauxValidations->contains($bordereauxValidation)) {
+            $this->bordereauxValidations->add($bordereauxValidation);
+            $bordereauxValidation->setUserCreated($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBordereauxValidation(BordereauxValidation $bordereauxValidation): static
+    {
+        if ($this->bordereauxValidations->removeElement($bordereauxValidation)) {
+            // set the owning side to null (unless already changed)
+            if ($bordereauxValidation->getUserCreated() === $this) {
+                $bordereauxValidation->setUserCreated(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LivraisonStockCab>
+     */
+    public function getLivraisonsValider(): Collection
+    {
+        return $this->livraisonsValider;
+    }
+
+    public function addLivraisonsValider(LivraisonStockCab $livraisonsValider): static
+    {
+        if (!$this->livraisonsValider->contains($livraisonsValider)) {
+            $this->livraisonsValider->add($livraisonsValider);
+            $livraisonsValider->setUserValider($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivraisonsValider(LivraisonStockCab $livraisonsValider): static
+    {
+        if ($this->livraisonsValider->removeElement($livraisonsValider)) {
+            // set the owning side to null (unless already changed)
+            if ($livraisonsValider->getUserValider() === $this) {
+                $livraisonsValider->setUserValider(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LivraisonObservation>
+     */
+    public function getLivraisonObservations(): Collection
+    {
+        return $this->livraisonObservations;
+    }
+
+    public function addLivraisonObservation(LivraisonObservation $livraisonObservation): static
+    {
+        if (!$this->livraisonObservations->contains($livraisonObservation)) {
+            $this->livraisonObservations->add($livraisonObservation);
+            $livraisonObservation->setUserCreated($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivraisonObservation(LivraisonObservation $livraisonObservation): static
+    {
+        if ($this->livraisonObservations->removeElement($livraisonObservation)) {
+            // set the owning side to null (unless already changed)
+            if ($livraisonObservation->getUserCreated() === $this) {
+                $livraisonObservation->setUserCreated(null);
             }
         }
 

@@ -311,6 +311,13 @@ table.custom-striped>tbody>tr:nth-of-type(even) {
   background-color: #ffe6e9 !important;
 }
 
+.is_valide {
+  background-color: #ebfaeb !important;
+}
+
+.swal2-container {
+    z-index: 2000 !important;
+}
 // page body
 
 .page-body {
