@@ -49,9 +49,6 @@ class LivraisonStockCab
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $print = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $valide = null;
-
     /**
      * @var Collection<int, LivraisonStockLot>
      */
@@ -88,11 +85,33 @@ class LivraisonStockCab
     #[ORM\ManyToOne(inversedBy: 'livraisonStockCabs')]
     private ?LivraisonStatus $status = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateValidation = null;
+
+    #[ORM\ManyToOne(inversedBy: 'livraisonsValider')]
+    private ?User $userValider = null;
+
+    #[ORM\ManyToOne(inversedBy: 'livraisonStockCabs')]
+    private ?BordereauxValidation $bordereauxValidation = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isValide = null;
+
+    /**
+     * @var Collection<int, LivraisonObservation>
+     */
+    #[ORM\OneToMany(targetEntity: LivraisonObservation::class, mappedBy: 'livraison')]
+    private Collection $livraisonObservations;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateFuture = null;
+
     public function __construct()
     {
         $this->livraisonStockDets = new ArrayCollection();
         $this->livraisonStockCabs = new ArrayCollection();
         $this->livraisonStockLot = new ArrayCollection();
+        $this->livraisonObservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -228,18 +247,6 @@ class LivraisonStockCab
     public function setPrint(?string $print): static
     {
         $this->print = $print;
-
-        return $this;
-    }
-
-    public function isValide(): ?bool
-    {
-        return $this->valide;
-    }
-
-    public function setValide(?bool $valide): static
-    {
-        $this->valide = $valide;
 
         return $this;
     }
@@ -402,6 +409,96 @@ class LivraisonStockCab
     public function setStatus(?LivraisonStatus $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getDateValidation(): ?\DateTimeInterface
+    {
+        return $this->dateValidation;
+    }
+
+    public function setDateValidation(?\DateTimeInterface $dateValidation): static
+    {
+        $this->dateValidation = $dateValidation;
+
+        return $this;
+    }
+
+    public function getUserValider(): ?User
+    {
+        return $this->userValider;
+    }
+
+    public function setUserValider(?User $userValider): static
+    {
+        $this->userValider = $userValider;
+
+        return $this;
+    }
+
+    public function getBordereauxValidation(): ?BordereauxValidation
+    {
+        return $this->bordereauxValidation;
+    }
+
+    public function setBordereauxValidation(?BordereauxValidation $bordereauxValidation): static
+    {
+        $this->bordereauxValidation = $bordereauxValidation;
+
+        return $this;
+    }
+
+    public function isValide(): ?bool
+    {
+        return $this->isValide;
+    }
+
+    public function setValide(?bool $isValide): static
+    {
+        $this->isValide = $isValide;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LivraisonObservation>
+     */
+    public function getLivraisonObservations(): Collection
+    {
+        return $this->livraisonObservations;
+    }
+
+    public function addLivraisonObservation(LivraisonObservation $livraisonObservation): static
+    {
+        if (!$this->livraisonObservations->contains($livraisonObservation)) {
+            $this->livraisonObservations->add($livraisonObservation);
+            $livraisonObservation->setLivraison($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivraisonObservation(LivraisonObservation $livraisonObservation): static
+    {
+        if ($this->livraisonObservations->removeElement($livraisonObservation)) {
+            // set the owning side to null (unless already changed)
+            if ($livraisonObservation->getLivraison() === $this) {
+                $livraisonObservation->setLivraison(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDateFuture(): ?\DateTimeInterface
+    {
+        return $this->dateFuture;
+    }
+
+    public function setDateFuture(?\DateTimeInterface $dateFuture): static
+    {
+        $this->dateFuture = $dateFuture;
 
         return $this;
     }

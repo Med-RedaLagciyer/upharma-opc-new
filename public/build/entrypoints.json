@@ -5,60 +5,81 @@
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
         "/build/351.a6119758.js",
-        "/build/app.d91d5a33.js"
+        "/build/app.7077e353.js"
       ],
       "css": [
         "/build/351.8bb31a85.css",
-        "/build/app.ad774f24.css"
+        "/build/app.3286a070.css"
       ]
     },
     "security_register": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/security_register.574a3a7f.js"
+        "/build/security_register.9dd3d85f.js"
       ]
     },
     "synchronisation": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/synchronisation.0add2e16.js"
+        "/build/synchronisation.9cabb4c4.js"
       ]
     },
     "admin_users": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/admin_users.30da39ed.js"
+        "/build/admin_users.1e8e712a.js"
       ]
     },
     "pharmacy_liv_cree": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/pharmacy_liv_cree.87f7913c.js"
+        "/build/pharmacy_liv_cree.aeef0e61.js"
       ]
     },
     "pharmacy_liv_envoye": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/pharmacy_liv_envoye.ce5f47d9.js"
+        "/build/pharmacy_liv_envoye.923d8902.js"
       ]
     },
     "pharmacy_liv_confirme": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/pharmacy_liv_confirme.f1b67f6a.js"
+        "/build/pharmacy_liv_confirme.b90e58ad.js"
+      ]
+    },
+    "pharmacy_liv_prete": {
+      "js": [
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/pharmacy_liv_prete.6ddbf429.js"
+      ]
+    },
+    "pharmacy_liv_livre": {
+      "js": [
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/pharmacy_liv_livre.2787197e.js"
+      ]
+    },
+    "pharmacy_liv_future": {
+      "js": [
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/pharmacy_liv_future.ef713d06.js"
       ]
     },
     "admin_rdv": {
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/admin_rdv.031aa603.js"
+        "/build/admin_rdv.5ec81386.js"
       ]
     }
   }

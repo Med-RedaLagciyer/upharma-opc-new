@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rendez-vous
+{% endblock %}
+
+{% block body %}
+<style>
+    .swal2-actions{
+        width:100% !important;
+        padding: 0 15px;
+    }
+</style>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card">
+				<div class="container-xl p-0 pt-3 pb-1" style="padding-right: 9px !important;">
+					<div class="row g-2 align-items-center">
+						<div class="col">
+							<ol class="breadcrumb breadcrumb-arrows" aria-label="breadcrumbs">
+								<li class="breadcrumb-item active">
+									<a href="#">Livraison</a>
+								</li>
+								<li class="breadcrumb-item">
+									<a href="{{path('app_pharmacy_livraison_prete')}}">Prêt pour enlèvement</a>
+								</li>
+							</ol>
+						</div>
+						<div class="col-auto ms-auto d-print-none">
+							<div class="btn-list">
+								{% include 'inc/actions.html.twig' %}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+                    <div class="col">
+						<div class="form-check form-check-inline px-2 ml-2">
+							<input class="form-control scanInput" type="text" name="scanInput" id="scanInput" placeholder="Scan Code Barre">
+						</div>
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table id="list_Livraison_prete" class="table custom-striped table-bordered" style="width:100%">
+						<thead>
+							<tr>
+								<th width="3%"><input type="checkbox" class="selectAllLivraisons"></th>
+								<th width="5%">Demande</th>
+								<th width="10%">Date</th>
+								<th width="5%">Livraison</th>
+								<th width="10%">Date</th>
+								<th width="10%">Patient</th>
+								<th width="10%">Dossier</th>
+								<th width="10%">Statut</th>
+								<th width="1%"></th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	{# {% include 'pharmacy/livraison_cree/modals/rdv_new.html.twig' %} #}
+	{% include 'pharmacy/livraison_prete/modals/details.html.twig' %}
+	{% include 'pharmacy/livraison_prete/modals/observation.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+	{{parent()}}
+	{{ encore_entry_script_tags('pharmacy_liv_prete') }}
+{% endblock %}

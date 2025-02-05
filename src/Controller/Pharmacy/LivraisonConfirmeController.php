@@ -4,10 +4,11 @@ namespace App\Controller\Pharmacy;
 
 use DateTime;
 use App\Entity\UsModule;
-use App\Controller\ApiController;
 use App\Entity\ListPosition;
 use App\Entity\LivraisonStatus;
+use App\Controller\ApiController;
 use App\Entity\LivraisonStockCab;
+use App\Entity\LivraisonObservation;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -162,7 +163,7 @@ class LivraisonConfirmeController extends AbstractController
             $LivraisonPosition = $position;
         }
 
-        $status = $this->em->getRepository(LivraisonStatus::class)->find(3);
+        $status = $this->em->getRepository(LivraisonStatus::class)->find(4);
         $livraison->setStatus($status);
         $livraison->setPosition($LivraisonPosition);
 
@@ -171,5 +172,78 @@ class LivraisonConfirmeController extends AbstractController
         $this->em->flush();
 
         return new JsonResponse("Livraison est prête pour envoi, sur position : ".$LivraisonPosition->getPosition(), 200);
+    }
+    #[Route('/future', name: 'app_pharmacy_livraison_confirme_future', options: ['expose' => true])]
+    public function app_pharmacy_livraison_confirme_future(Request $request): Response
+    {
+        // dd($request);
+        $idLivraison = $request->get('livraison');
+        $dateFuture = $request->get('date');
+
+        $livraison = $this->em->getRepository(LivraisonStockCab::class)->find($idLivraison);
+
+        if (!$livraison) {
+            return new JsonResponse(['error' => 'Aucun Livraison.'], 404);
+        }
+
+        $livraisonParDemande = $this->em->getRepository(LivraisonStockCab::class)->findPositionByTheSameDemande($livraison);
+
+        $LivraisonPosition = NULL;
+        if($livraisonParDemande){
+            $LivraisonPosition =$livraisonParDemande[0]->getPosition() ;
+        }else{
+            $position = $this->em->getRepository(ListPosition::class)->findOneBy(["isReserved" => false]);
+            if(!$position){
+                return new JsonResponse(['error' => 'Tous les postitions sont occupées.'], 404);
+            }
+            $LivraisonPosition = $position;
+        }
+
+        $status = $this->em->getRepository(LivraisonStatus::class)->find(5);
+        $livraison->setStatus($status);
+        $livraison->setPosition($LivraisonPosition);
+        $livraison->setDateFuture(new DateTime($dateFuture));
+
+        $LivraisonPosition->setReserved(True);
+
+        $this->em->flush();
+
+        return new JsonResponse("Livraison est prévue en". $dateFuture .", sur position : ".$LivraisonPosition->getPosition(), 200);
+    }
+
+    #[Route('/observation', name: 'app_pharmacy_livraison_confirme_observation', options: ['expose' => true])]
+    public function app_pharmacy_livraison_confirme_observation(Request $request): Response
+    {
+        $livraisons = $request->get('livraisons');
+        $observation = $request->get('observation');
+
+        if(!$livraisons || $livraisons == []){
+            return new JsonResponse(['error' => 'Merci de choisir une ou plusieurs livraisons.'], 500);
+        }
+
+        if(!$observation || $observation === ""){
+            return new JsonResponse(['error' => 'Merci d\'inserer l\'observation.'], 500);
+        }
+
+        foreach($livraisons as $idLivraison){
+            $livraison = $this->em->getRepository(LivraisonStockCab::class)->find($idLivraison);
+
+            if (!$livraison) {
+                return new JsonResponse(['error' => 'Aucune Livraison trouvée.'], 404);
+            }
+
+            $livraisonObs = new LivraisonObservation();
+            $livraisonObs->setLivraison($livraison);
+            $livraisonObs->setObservation($observation);
+            $livraisonObs->setUserCreated($this->getUser());
+            $livraisonObs->setCreated(new DateTime('now'));
+            $livraisonObs->setStatus($livraison->getStatus()->getDesignation());
+            $this->em->persist($livraisonObs);
+        }
+
+        $this->em->flush();
+
+        // dd($idLivraison,$observation);
+        return new JsonResponse("Observation enregistré avec succès.", 200);
     }
 }

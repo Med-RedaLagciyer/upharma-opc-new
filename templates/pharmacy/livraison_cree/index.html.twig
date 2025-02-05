@@ -43,7 +43,7 @@
 					<table id="list_Livraison_cree" class="table custom-striped table-bordered" style="width:100%">
 						<thead>
 							<tr>
-								<th width="3%">#</th>
+								<th width="3%"><input type="checkbox" class="selectAllLivraisons"></th>
 								<th width="5%">Demande</th>
 								<th width="10%">Date</th>
 								<th width="5%">Livraison</th>
@@ -62,6 +62,7 @@
 	</div>
 	{# {% include 'pharmacy/livraison_cree/modals/rdv_new.html.twig' %} #}
 	{% include 'pharmacy/livraison_cree/modals/details.html.twig' %}
+	{% include 'pharmacy/livraison_cree/modals/observation.html.twig' %}
 {% endblock %}
 {% block javascripts %}
 	{{parent()}}

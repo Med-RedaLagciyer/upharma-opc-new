@@ -23,10 +23,10 @@
     <div class="hr-text" style="margin: 20px 0 6px 0 !important;">Impressions Associées</div>
     <div class="row mt-2">
         <div class="col-md-4">
-            <a href="#" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Impression Demande : {{livraison.demande.code}}</a>
+            <a href="#" id="pdfDemande" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Demande : {{livraison.demande.code}}</a>
         </div>
         <div class="col-md-4">
-            <a href="#" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Impression Livraison : {{livraison.code}}</a>
+            <a href="#" id="pdfLivraison" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Livraison : {{livraison.code}}</a>
         </div>
     </div>
 
@@ -64,9 +64,14 @@
     </table>
     <footer class="position-absolute bottom-0 mb-5">
         <div class="container-xl">
-            <div class="row">
-                <div class="col-md-9 float-right etatContainer">
-
+            <div class="row" style="justify-content: end;">
+                <div class="col-md-3">
+                    {% if operations|filter(o => o.id == 34)|length > 0 %}
+                        <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-warning w-100 ModalFutureLiv">
+                            <i class="fa-solid fa-hourglass-half"></i>&nbsp;
+                            Future Commande
+                        </a>
+                    {% endif %}
                 </div>
                 <div class="col-md-3">
                     {% if operations|filter(o => o.id == 13)|length > 0 %}
@@ -75,6 +80,11 @@
                             Prêt pour enlèvement
                         </a>
                     {% endif %}
+                </div>
+                <div class="col-md-1 float-right">
+                    <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 observation">
+                        <i class="fa fa-solid fa-edit"></i>&nbsp;
+                    </a>
                 </div>
             </div>
         </div>

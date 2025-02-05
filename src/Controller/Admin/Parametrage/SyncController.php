@@ -20,6 +20,7 @@ use App\Controller\ApiController;
 use App\Entity\LivraisonStockCab;
 use App\Entity\LivraisonStockDet;
 use App\Entity\InterfacageMissing;
+use App\Entity\LivraisonStatus;
 use App\Entity\LivraisonStockLot;
 use App\Entity\PNaturePrix;
 use App\Service\AccessDatabaseService;
@@ -70,15 +71,17 @@ class SyncController extends AbstractController
         $insertedCount = 0;
 
         $lastArticle = $this->em->getRepository(Interfacage::class)->findOneBy(["tabelName" => "pArticles"]);
-        $lastArticleId = $lastArticle ? $lastArticle->getLastId() : 1;
+        $lastArticleId = $lastArticle ? $lastArticle->getLastId() : 0;
 
-        $sql = "SELECT  TOP 5000 * FROM pArticles WHERE Auto >" . $lastArticleId . " ORDER BY Auto";
+        $sql = "SELECT * FROM pArticles WHERE Auto >" . $lastArticleId . " ORDER BY Auto";
         $results = $this->accessDatabaseService->query($sql);
+        // dd($results);
         try {
             if($results){
                 foreach ($results as $result) {
                     $articleExist = $this->em->getRepository(UArticle::class)->find($result["ID_Article"]);
                     if($articleExist){
+                        dd($articleExist, $results);
                         continue;
                     }
                     $article = new UArticle();
@@ -104,13 +107,13 @@ class SyncController extends AbstractController
             }
 
             $lastArticle = $lastArticle ? $lastArticle : new Interfacage();
-            $articles = $this->em->getRepository(UArticle::class)->findBy([], ['id' => 'DESC']);
+            $articles = $this->em->getRepository(UArticle::class)->findBy([], ['idAccess' => 'DESC']);
             $lastArticle->setTabelName("pArticles");
             $lastArticle->setLastId($articles[0]->getIdAccess());
 
             $this->em->persist($lastArticle);
             $this->em->flush();
-
+            // dd("hi");
             return new JsonResponse(['message' => 'Articles inserted successfully.', 'countInserted' => $insertedCount, 'countTotal' => count($articles)], 200);
 
         } catch (\Throwable $th) {
@@ -124,9 +127,9 @@ class SyncController extends AbstractController
         $insertedCount = 0;
 
         $lastDemandeCab = $this->em->getRepository(Interfacage::class)->findOneBy(["tabelName" => "pVCommande"]);
-        $lastDemandeCabId = $lastDemandeCab ? $lastDemandeCab->getLastId() : 1;
+        $lastDemandeCabId = $lastDemandeCab ? $lastDemandeCab->getLastId() : 0;
 
-        $sql = "SELECT  TOP 5000 * FROM pVCommande WHERE Auto >" . $lastDemandeCabId . " AND ID_Client = 'M17025' ORDER BY Auto";
+        $sql = "SELECT  TOP 5000 * FROM pVCommande WHERE Auto >" . $lastDemandeCabId . " ORDER BY Auto";
         $results = $this->accessDatabaseService->query($sql);
         // dd($sql);
         try {
@@ -214,13 +217,13 @@ class SyncController extends AbstractController
         $insertedCount = 0;
 
         $lastDemandeDet = $this->em->getRepository(Interfacage::class)->findOneBy(["tabelName" => "pVCommande_LG"]);
-        $lastDemandeDetId = $lastDemandeDet ? $lastDemandeDet->getLastId() : 1;
+        $lastDemandeDetId = $lastDemandeDet ? $lastDemandeDet->getLastId() : 0;
 
         $sql = "SELECT TOP 5000 lg.Auto, lg.ID_Article, lg.ID_Commande,lg.Quantite_CD, lg.Quantite_SV
 FROM pVCommande_LG lg
 INNER JOIN pVCommande ON lg.ID_Commande = pVCommande.ID_Commande
 WHERE lg.Auto > ".$lastDemandeDetId."
-  AND pVCommande.ID_Client = 'M17025' ORDER BY lg.Auto;";
+   ORDER BY lg.Auto;";
         $results = $this->accessDatabaseService->query($sql);
         // dd($sql);
         try {
@@ -284,20 +287,20 @@ WHERE lg.Auto > ".$lastDemandeDetId."
         $insertedCount = 0;
 
         $lastLivraisonCab = $this->em->getRepository(Interfacage::class)->findOneBy(["tabelName" => "pVLivraison"]);
-        $lastLivraisonCabId = $lastLivraisonCab ? $lastLivraisonCab->getLastId() : 1;
+        $lastLivraisonCabId = $lastLivraisonCab ? $lastLivraisonCab->getLastId() : 0;
 
         $sql = "SELECT  TOP 5000 pVLivraison.Auto, pVLivraison.ID_Commande,pVLivraison.ID_Livraison,pVLivraison.Date_Livraison,pVLivraison.ID_DegrerUrg, pVLivraison.ID_Reference FROM pVLivraison
         INNER JOIN pVCommande ON pVLivraison.ID_Commande = pVCommande.ID_Commande
-        WHERE pVLivraison.Auto >" . $lastLivraisonCabId . " AND pVCommande.ID_Client = 'M17025' ORDER BY pVLivraison.Auto;";
+        WHERE pVLivraison.Auto >" . $lastLivraisonCabId . "  ORDER BY pVLivraison.Auto;";
         $results = $this->accessDatabaseService->query($sql);
         // dd($results);
         try {
             if($results){
                 foreach ($results as $result) {
-                    $livraisonCabExist = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result["ID_Livraison"]]);
-                    if($livraisonCabExist){
-                        continue;
-                    }
+                    // $livraisonCabExist = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result["ID_Livraison"]]);
+                    // if($livraisonCabExist){
+                    //     continue;
+                    // }
 
                     $demandeCab = $this->em->getRepository(DemandeStockCab::class)->findOneBy(["code" => $result["ID_Commande"]]);
                     if(!$demandeCab){
@@ -313,7 +316,7 @@ WHERE lg.Auto > ".$lastDemandeDetId."
                     $livraisonCab->setCode($result["ID_Livraison"]);
                     $livraisonCab->setDate(new \DateTime($result["Date_Livraison"]));
                     $livraisonCab->setUrgent($result['ID_DegrerUrg'] === 'URG' ? 1 : 0);
-                    $livraisonCab->setStatus($this->em->getRepository(DemandeStatus::class)->find(1));
+                    $livraisonCab->setStatus($this->em->getRepository(LivraisonStatus::class)->find(1));
                     $livraisonCab->setActive(true);
                     $livraisonCab->setDemande($demandeCab);
 
@@ -351,18 +354,24 @@ WHERE lg.Auto > ".$lastDemandeDetId."
         $insertedCount = 0;
 
         $lastLivraisonDet = $this->em->getRepository(Interfacage::class)->findOneBy(["tabelName" => "pVLivraison_LG"]);
-        $lastLivraisonDetId = $lastLivraisonDet ? $lastLivraisonDet->getLastId() : 1;
+        $lastLivraisonDetId = $lastLivraisonDet ? $lastLivraisonDet->getLastId() : 0;
 
         $sql = "SELECT  TOP 5000 lg.Auto, lg.ID_Livraison, lg.ID_Article, lg.Quantite_BL
         FROM (pVLivraison_LG lg
         INNER JOIN pVLivraison ON pVLivraison.ID_Livraison = lg.ID_Livraison)
         INNER JOIN pVCommande ON pVLivraison.ID_Commande = pVCommande.ID_Commande
-        WHERE lg.Auto >" . $lastLivraisonDetId . " AND pVCommande.ID_Client = 'M17025' ORDER BY lg.Auto";
+        WHERE lg.Auto >" . $lastLivraisonDetId . " ORDER BY lg.Auto";
         $results = $this->accessDatabaseService->query($sql);
         // dd($results);
         try {
             if($results){
                 foreach ($results as $result) {
+
+                    // $livDet = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["idAccess" => $result["Auto"]]);
+
+                    // if($livDet){
+                    //     continue;
+                    // }
 
                     $livraisonCab = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result["ID_Livraison"]]);
                     if(!$livraisonCab){
@@ -417,13 +426,13 @@ WHERE lg.Auto > ".$lastDemandeDetId."
         $insertedCount = 0;
 
         $lastLivraisonLot = $this->em->getRepository(Interfacage::class)->findOneBy(["tabelName" => "pVLivraison_LT"]);
-        $lastLivraisonLotId = $lastLivraisonLot ? $lastLivraisonLot->getLastId() : 1;
+        $lastLivraisonLotId = $lastLivraisonLot ? $lastLivraisonLot->getLastId() : 0;
 
         $sql = "SELECT  TOP 5000 lot.Auto, lot.ID_Livraison, lot.Lot, lot.Date_Sys, lot.Date_Expir, lot.Quantite_LT, lot.Quantite_RT, lot.ID_Nature_Prix, lot.Prix_Vente, lot.Prix_Achat, lot.Montant, lot.Taux, lot.ValeurA, lot.Marge
         FROM (pVLivraison_LT lot
         INNER JOIN pVLivraison ON pVLivraison.ID_Livraison = lot.ID_Livraison)
         INNER JOIN pVCommande ON pVLivraison.ID_Commande = pVCommande.ID_Commande
-        WHERE lot.Auto >" . $lastLivraisonLotId . " AND pVCommande.ID_Client = 'M17025' ORDER BY lot.Auto";
+        WHERE lot.Auto >" . $lastLivraisonLotId . " ORDER BY lot.Auto";
 
         $results = $this->accessDatabaseService->query($sql);
         // dd($results);
@@ -485,7 +494,7 @@ WHERE lg.Auto > ".$lastDemandeDetId."
     #[Route('/fixArticleMissing', name: 'fixArticleMissing', options: ['expose' => true])]
     public function fixArticleMissing(){
         $lastArticle = $this->em->getRepository(Interfacage::class)->findOneBy(["tabelName" => "pArticles"]);
-        $lastArticleId = $lastArticle ? $lastArticle->getLastId() : 1;
+        $lastArticleId = $lastArticle ? $lastArticle->getLastId() : 0;
 
         $idList = NULL ;
         $sql = "

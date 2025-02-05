@@ -23,10 +23,10 @@
     <div class="hr-text" style="margin: 20px 0 6px 0 !important;">Impressions Associées</div>
     <div class="row mt-2">
         <div class="col-md-4">
-            <a href="#" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Impression Demande : {{livraison.demande.code}}</a>
+            <a href="#" id="pdfDemande" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Demande : {{livraison.demande.code}}</a>
         </div>
         <div class="col-md-4">
-            <a href="#" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Impression Livraison : {{livraison.code}}</a>
+            <a href="#" id="pdfLivraison" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Livraison : {{livraison.code}}</a>
         </div>
     </div>
 
@@ -64,8 +64,8 @@
     </table>
     <footer class="position-absolute bottom-0 mb-5">
         <div class="container-xl">
-            <div class="row">
-                <div class="col-md-9 float-right">
+            <div class="row" style="justify-content: end;">
+                <div class="col-md-8 float-right">
                     <div class="" style="float:right;margin-top: 7px;">
                         <label class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="etatInput" id="frigorifiee" value="Séc" checked="">
@@ -88,6 +88,11 @@
                             Envoyer
                         </a>
                     {% endif %}
+                </div>
+                <div class="col-md-1 float-right">
+                    <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 observation">
+                        <i class="fa fa-solid fa-edit"></i>&nbsp;
+                    </a>
                 </div>
             </div>
         </div>

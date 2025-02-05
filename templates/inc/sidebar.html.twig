@@ -10,7 +10,7 @@
 		<h1 class="navbar-brand navbar-brand-autodark">
 			<a href="{{path('app_home')}}">
 				<div style="text-align: center;">
-					<img src="{{asset('static/logo_black.png')}}" style=" width: 150px; margin: 0 auto;filter: invert(1);">
+					<img src="{{asset('static/logo-upharma.png')}}" style=" width: 150px; margin: 0 auto;">
 				</div>
 			</a>
 		</h1>
@@ -42,8 +42,8 @@
 								<div class="dropdown-menu-columns">
 									{% for sousModule in module.sousModule %}
 										<div class="dropdown-menu-column">
-											<a class="dropdown-item {% if getCurrentUrl == module.module.prefix and secondCurrentUrl == sousModule.prefix %} active {% endif %}" href="{{path(sousModule.link)}}">
-												{{sousModule.designation}}
+											<a title="{{sousModule.designation}}" class="dropdown-item truncated-text{% if getCurrentUrl == module.module.prefix and secondCurrentUrl == sousModule.prefix %} active {% endif %}" href="{{path(sousModule.link)}}">
+                                            {{sousModule.designation|length > 25 ? sousModule.designation|slice(0, 25) ~ '...' : sousModule.designation}}
 											</a>
 										</div>
 									{% endfor %}

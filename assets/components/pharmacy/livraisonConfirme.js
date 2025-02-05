@@ -47,7 +47,7 @@ $(document).ready(function () {
 
     $("select").select2();
 
-    let selectedActes = [];
+    var livraison_array = [];
 
     if ($.fn.dataTable.isDataTable("#list_Livraison_confirme")) {
         $("#list_Livraison_confirme").DataTable().clear().destroy();
@@ -112,7 +112,8 @@ $(document).ready(function () {
                 orderable: false,
                 searchable: false,
                 render: function (data, type, full, meta) {
-                    return meta.row + 1; // Custom order starting from 1
+                    var checked = livraison_array.includes(data) ? 'checked' : '';
+                    return `<input type="checkbox" class="selectLivraison" data-id="${data}" ${checked}>`;
                 }
             },
             {
@@ -159,12 +160,44 @@ $(document).ready(function () {
             // }
         },
         initComplete: function () {
+            $(".selectAllLivraisons").on("change", function () {
+                var isChecked = $(this).prop('checked');
+                $("input.selectLivraison").each(function() {
+                    $(this).prop('checked', isChecked);
+                    var id = $(this).data('id');
+                    if (isChecked && !livraison_array.includes(id)) {
+                        livraison_array.push(id);
+                    } else if (!isChecked && livraison_array.includes(id)) {
+                        livraison_array = livraison_array.filter(item => item !== id);
+                    }
+                });
+            });
+
+            $('#list_Livraison_confirme tbody').on('change', 'input.selectLivraison', function () {
+                var id = $(this).data('id');
+                if ($(this).prop('checked')) {
+                    if (!livraison_array.includes(id)) {
+                        livraison_array.push(id);
+                    }
+                } else {
+                    livraison_array = livraison_array.filter(item => item !== id);
+                }
+                updateSelectAllCheckboxState();
+            });
             // Prevent sorting when interacting with select in header
             $("thead .selection").on("click", function (e) {
                 e.stopPropagation();
             });
         },
+        drawCallback: function () {
+            updateSelectAllCheckboxState();
+        }
     });
+
+    function updateSelectAllCheckboxState() {
+        var allChecked = $("#list_Livraison_confirme tbody input.selectLivraison").length === $("#list_Livraison_confirme tbody input.selectLivraison:checked").length;
+        $(".selectAllLivraisons").prop('checked', allChecked);
+    }
 
     $('body').on('click', '.detailsLiv', async function (e) {
         e.preventDefault();
@@ -199,6 +232,7 @@ $(document).ready(function () {
             }
         }
     })
+
 
     const preterLivraison = async (id_livraison) => {
         try {
@@ -246,10 +280,24 @@ $(document).ready(function () {
         await preterLivraison(id_livraison);
     })
 
-    // if user has the prete privilege :
-    $('body').on('click', '.ModalPreteLiv', async function (e) {
+    $('body').on('click', '.ModalFutureLiv', async function (e) {
         e.preventDefault();
-        let id_livraison = $(this).attr('data-id');
+        $('#future_modal #date').attr("data-livraison", $(this).attr('data-id'));
+        $('#future_modal').modal("show")
+    })
+
+    $('body').on('click', '.FutureLiv', async function (e) {
+        e.preventDefault();
+        $('#future_modal #date').attr("data-livraison", $(this).attr('data-id'));
+        $('#future_modal').modal("show")
+    })
+
+    $('body').on('click', '#saveFuture', async function (e) {
+        e.preventDefault();
+
+        let date = $('#future_modal #date').val();
+        let livraison_id = $('#future_modal #date').attr("data-livraison");
+
         try {
             window.notyf.open({
                 type: "info",
@@ -257,8 +305,9 @@ $(document).ready(function () {
                 duration: 9000000,
             });
             const request = await axios.post(
-                Routing.generate('app_pharmacy_livraison_confirme_preter',{
-                    id_livraison: id_livraison,
+                Routing.generate('app_pharmacy_livraison_confirme_future',{
+                    livraison: livraison_id,
+                    date: date,
                 })
             );
             const response = await request.data;
@@ -266,11 +315,13 @@ $(document).ready(function () {
             window.notyf.open({
                 type: "success",
                 message: response,
-                duration: 0,
+                duration: 3000,
             });
 
+            $('#future_modal #date').val("");
+            $('#future_modal #date').attr("data-livraison", "");
+            $('#future_modal').modal("hide")
             table.ajax.reload();
-            $('#detailsModal').modal("hide")
         } catch (error) {
             window.notyf.dismissAll();
             console.log(error);
@@ -281,5 +332,79 @@ $(document).ready(function () {
                 window.notyf.error('Something went wrong!');
             }
         }
+    });
+
+
+
+    $('body').on('click', '.observationMass', async function (e) {
+        // alert("hi");
+        e.preventDefault();
+        if (livraison_array.length <= 0) {
+            window.notyf.error("Merci de choisir une ou plusieurs livraisons.");
+            return;
+        }
+
+        $('#observation_modal #observation').attr("data-livraisons", JSON.stringify(livraison_array));
+        $('#observation_modal').modal("show")
+    })
+
+    $('body').on('click', '.observation', async function (e) {
+        e.preventDefault();
+        livraison = [$(this).attr('data-id')];
+        $('#observation_modal #observation').attr("data-livraisons", JSON.stringify(livraison));
+        $('#observation_modal').modal("show")
+    })
+
+    $('body').on('click', '#saveOBS', async function (e) {
+        e.preventDefault();
+
+        let observation = $('#observation_modal #observation').val();
+        let livraison_array = $('#observation_modal #observation').attr("data-livraisons");
+
+        try {
+            window.notyf.open({
+                type: "info",
+                message: "En cours..",
+                duration: 9000000,
+            });
+            const request = await axios.post(
+                Routing.generate('app_pharmacy_livraison_confirme_observation',{
+                    livraisons: JSON.parse(livraison_array),
+                    observation: observation,
+                })
+            );
+            const response = await request.data;
+            window.notyf.dismissAll();
+            window.notyf.open({
+                type: "success",
+                message: response,
+                duration: 3000,
+            });
+
+            $('#observation_modal #observation').val("");
+            $('#observation_modal #observation').attr("data-livraisons", "");
+            $('#observation_modal').modal("hide")
+            table.ajax.reload();
+        } catch (error) {
+            window.notyf.dismissAll();
+            console.log(error);
+            if (error.response && error.response.data) {
+                const message = error.response.data.error;
+                window.notyf.error(message);
+            } else {
+                window.notyf.error('Something went wrong!');
+            }
+        }
+    });
+
+    $('body').on('click', '#pdfLivraison', function (e) {
+        e.preventDefault();
+        livraison = $(this).attr('data-id');
+
+        let url = Routing.generate('app_pharmacy_exports_export_pdf_livraison', {
+            livraison: livraison
+        });
+
+        window.open(url, '_blank');
     })
 });
