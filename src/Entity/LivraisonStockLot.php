@@ -68,6 +68,12 @@ class LivraisonStockLot
     #[ORM\ManyToOne(inversedBy: 'livraisonStockLots')]
     private ?PNaturePrix $naturePrix = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $lignBl = null;
+
+    #[ORM\ManyToOne(inversedBy: 'livraisonStockLots')]
+    private ?LivraisonStockDet $livraisonDet = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -285,6 +291,30 @@ class LivraisonStockLot
     public function setNaturePrix(?PNaturePrix $naturePrix): static
     {
         $this->naturePrix = $naturePrix;
+
+        return $this;
+    }
+
+    public function getLignBl(): ?int
+    {
+        return $this->lignBl;
+    }
+
+    public function setLignBl(?int $lignBl): static
+    {
+        $this->lignBl = $lignBl;
+
+        return $this;
+    }
+
+    public function getLivraisonDet(): ?LivraisonStockDet
+    {
+        return $this->livraisonDet;
+    }
+
+    public function setLivraisonDet(?LivraisonStockDet $livraisonDet): static
+    {
+        $this->livraisonDet = $livraisonDet;
 
         return $this;
     }

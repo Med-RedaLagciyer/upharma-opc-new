@@ -7,6 +7,7 @@ use App\Entity\UsModule;
 use App\Entity\LivraisonStatus;
 use App\Controller\ApiController;
 use App\Entity\LivraisonStockCab;
+use App\Service\UserActivityLogger;
 use App\Entity\LivraisonObservation;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,10 +21,12 @@ class LivraisonCreeController extends AbstractController
 {
     private $em;
     private $api;
-    public function __construct(ManagerRegistry $doctrine, ApiController $api)
+    private $activityLogger;
+    public function __construct(ManagerRegistry $doctrine, ApiController $api,UserActivityLogger $activityLogger)
     {
         $this->em = $doctrine->getManager();
         $this->api = $api;
+        $this->activityLogger = $activityLogger;
     }
 
     #[Route('/', name: 'app_pharmacy_livraison_cree')]
@@ -160,11 +163,15 @@ class LivraisonCreeController extends AbstractController
         $livraison->setStatus($status);
         $livraison->setEtat($selectedEtat);
 
+        $this->em->flush();
+        $this->activityLogger->statusLog($livraison);
+
         foreach ($retours as $retour) {
             $retour->setStatus($this->em->getRepository(LivraisonStatus::class)->find(7));
+            $this->em->flush();
+            $this->activityLogger->statusLog($retour);
         }
 
-        $this->em->flush();
 
         return new JsonResponse("Livraison envoyée avec succès.", 200);
     }

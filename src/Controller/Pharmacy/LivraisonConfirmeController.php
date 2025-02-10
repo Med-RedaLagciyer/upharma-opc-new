@@ -8,6 +8,7 @@ use App\Entity\ListPosition;
 use App\Entity\LivraisonStatus;
 use App\Controller\ApiController;
 use App\Entity\LivraisonStockCab;
+use App\Service\UserActivityLogger;
 use App\Entity\LivraisonObservation;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +22,12 @@ class LivraisonConfirmeController extends AbstractController
 {
     private $em;
     private $api;
-    public function __construct(ManagerRegistry $doctrine, ApiController $api)
+    private $activityLogger;
+    public function __construct(ManagerRegistry $doctrine, ApiController $api,UserActivityLogger $activityLogger)
     {
         $this->em = $doctrine->getManager();
         $this->api = $api;
+        $this->activityLogger = $activityLogger;
     }
     #[Route('/', name: 'app_pharmacy_livraison_confirme')]
     public function index(Request $request): Response
@@ -171,6 +174,8 @@ class LivraisonConfirmeController extends AbstractController
 
         $this->em->flush();
 
+        $this->activityLogger->statusLog($livraison);
+
         return new JsonResponse("Livraison est prête pour envoi, sur position : ".$LivraisonPosition->getPosition(), 200);
     }
     #[Route('/future', name: 'app_pharmacy_livraison_confirme_future', options: ['expose' => true])]
@@ -207,6 +212,8 @@ class LivraisonConfirmeController extends AbstractController
         $LivraisonPosition->setReserved(True);
 
         $this->em->flush();
+
+        $this->activityLogger->statusLog($livraison);
 
         return new JsonResponse("Livraison est prévue en". $dateFuture .", sur position : ".$LivraisonPosition->getPosition(), 200);
     }

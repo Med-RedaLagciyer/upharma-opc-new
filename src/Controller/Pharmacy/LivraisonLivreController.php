@@ -3,31 +3,34 @@
 namespace App\Controller\Pharmacy;
 
 use DateTime;
+use Mpdf\Mpdf;
 use App\Entity\UsModule;
 use App\Entity\LivraisonStatus;
 use App\Controller\ApiController;
 use App\Entity\LivraisonStockCab;
+use App\Service\UserActivityLogger;
 use App\Entity\BordereauxValidation;
 use App\Entity\LivraisonObservation;
 use Doctrine\Persistence\ManagerRegistry;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Mpdf\Mpdf;
 
 #[Route('/pharmacy/livraison/livre')]
 class LivraisonLivreController extends AbstractController
 {
     private $em;
     private $api;
-    public function __construct(ManagerRegistry $doctrine, ApiController $api)
+    private $activityLogger;
+    public function __construct(ManagerRegistry $doctrine, ApiController $api,UserActivityLogger $activityLogger)
     {
         $this->em = $doctrine->getManager();
         $this->api = $api;
+        $this->activityLogger = $activityLogger;
     }
     #[Route('/', name: 'app_pharmacy_livraison_livre')]
     public function index(Request $request): Response

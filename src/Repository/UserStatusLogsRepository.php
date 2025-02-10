@@ -2,43 +2,42 @@
 
 namespace App\Repository;
 
-use App\Entity\DemandeStockDet;
+use App\Entity\UserStatusLogs;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<DemandeStockDet>
+ * @extends ServiceEntityRepository<UserStatusLogs>
  */
-class DemandeStockDetRepository extends ServiceEntityRepository
+class UserStatusLogsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, DemandeStockDet::class);
+        parent::__construct($registry, UserStatusLogs::class);
     }
 
 //    /**
-//     * @return DemandeStockDet[] Returns an array of DemandeStockDet objects
+//     * @return UserStatusLogs[] Returns an array of UserStatusLogs objects
 //     */
 //    public function findByExampleField($value): array
 //    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
+//        return $this->createQueryBuilder('u')
+//            ->andWhere('u.exampleField = :val')
 //            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
+//            ->orderBy('u.id', 'ASC')
 //            ->setMaxResults(10)
 //            ->getQuery()
 //            ->getResult()
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?DemandeStockDet
+//    public function findOneBySomeField($value): ?UserStatusLogs
 //    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
+//        return $this->createQueryBuilder('u')
+//            ->andWhere('u.exampleField = :val')
 //            ->setParameter('val', $value)
 //            ->getQuery()
 //            ->getOneOrNullResult()
 //        ;
 //    }
-
 }

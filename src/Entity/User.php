@@ -78,12 +78,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: LivraisonObservation::class, mappedBy: 'userCreated')]
     private Collection $livraisonObservations;
 
+    /**
+     * @var Collection<int, UserStatusLogs>
+     */
+    #[ORM\OneToMany(targetEntity: UserStatusLogs::class, mappedBy: 'userCreated')]
+    private Collection $userStatusLogs;
+
     public function __construct()
     {
         $this->livraisonStockCabs = new ArrayCollection();
         $this->bordereauxValidations = new ArrayCollection();
         $this->livraisonsValider = new ArrayCollection();
         $this->livraisonObservations = new ArrayCollection();
+        $this->userStatusLogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -362,6 +369,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($livraisonObservation->getUserCreated() === $this) {
                 $livraisonObservation->setUserCreated(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserStatusLogs>
+     */
+    public function getUserStatusLogs(): Collection
+    {
+        return $this->userStatusLogs;
+    }
+
+    public function addUserStatusLog(UserStatusLogs $userStatusLog): static
+    {
+        if (!$this->userStatusLogs->contains($userStatusLog)) {
+            $this->userStatusLogs->add($userStatusLog);
+            $userStatusLog->setUserCreated($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserStatusLog(UserStatusLogs $userStatusLog): static
+    {
+        if ($this->userStatusLogs->removeElement($userStatusLog)) {
+            // set the owning side to null (unless already changed)
+            if ($userStatusLog->getUserCreated() === $this) {
+                $userStatusLog->setUserCreated(null);
             }
         }
 

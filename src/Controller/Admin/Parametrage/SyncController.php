@@ -81,7 +81,7 @@ class SyncController extends AbstractController
                 foreach ($results as $result) {
                     $articleExist = $this->em->getRepository(UArticle::class)->find($result["ID_Article"]);
                     if($articleExist){
-                        dd($articleExist, $results);
+                        // dd($articleExist, $results);
                         continue;
                     }
                     $article = new UArticle();
@@ -219,7 +219,7 @@ class SyncController extends AbstractController
         $lastDemandeDet = $this->em->getRepository(Interfacage::class)->findOneBy(["tabelName" => "pVCommande_LG"]);
         $lastDemandeDetId = $lastDemandeDet ? $lastDemandeDet->getLastId() : 0;
 
-        $sql = "SELECT TOP 5000 lg.Auto, lg.ID_Article, lg.ID_Commande,lg.Quantite_CD, lg.Quantite_SV
+        $sql = "SELECT TOP 5000 lg.Auto, lg.ID_Article, lg.ID_Commande,lg.Quantite_CD, lg.Quantite_SV, lg.Ligne_CD
 FROM pVCommande_LG lg
 INNER JOIN pVCommande ON lg.ID_Commande = pVCommande.ID_Commande
 WHERE lg.Auto > ".$lastDemandeDetId."
@@ -255,6 +255,7 @@ WHERE lg.Auto > ".$lastDemandeDetId."
                     $demandeDet->setQte($result['Quantite_CD'] ?? 0);
                     $demandeDet->setQtLivre($result['Quantite_SV'] ?? 0);
                     $demandeDet->setDemandeCab($demandeCab);
+                    $demandeDet->setLignCd($result['Ligne_CD']);
 
 
 
@@ -356,14 +357,14 @@ WHERE lg.Auto > ".$lastDemandeDetId."
         $lastLivraisonDet = $this->em->getRepository(Interfacage::class)->findOneBy(["tabelName" => "pVLivraison_LG"]);
         $lastLivraisonDetId = $lastLivraisonDet ? $lastLivraisonDet->getLastId() : 0;
 
-        $sql = "SELECT  TOP 5000 lg.Auto, lg.ID_Livraison, lg.ID_Article, lg.Quantite_BL
+        $sql = "SELECT  TOP 5000 lg.Auto, lg.ID_Livraison, lg.ID_Article, lg.Quantite_BL, lg.Ligne_BL, lg.Ligne_CD
         FROM (pVLivraison_LG lg
         INNER JOIN pVLivraison ON pVLivraison.ID_Livraison = lg.ID_Livraison)
         INNER JOIN pVCommande ON pVLivraison.ID_Commande = pVCommande.ID_Commande
         WHERE lg.Auto >" . $lastLivraisonDetId . " ORDER BY lg.Auto";
         $results = $this->accessDatabaseService->query($sql);
         // dd($results);
-        try {
+        // try {
             if($results){
                 foreach ($results as $result) {
 
@@ -374,6 +375,10 @@ WHERE lg.Auto > ".$lastDemandeDetId."
                     // }
 
                     $livraisonCab = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result["ID_Livraison"]]);
+
+                    $demandeDet = $this->em->getRepository(DemandeStockDet::class)->findOneBy(["demandeCab" => $livraisonCab->getDemande(), "lignCd" => $result['Ligne_CD']]);
+
+                    // dd($demandeDet, $result['Ligne_CD'], $livraisonCab->getDemande());
                     if(!$livraisonCab){
                         // Save the missing demandeCab to sync it later
                         $this->saveInterfacageMissing("pVLivraison", "ID_Livraison", $result["ID_Livraison"]);
@@ -396,7 +401,9 @@ WHERE lg.Auto > ".$lastDemandeDetId."
                     $livraisonDet->setLivraison($livraisonCab);
                     $livraisonDet->setArticle($article);
                     $livraisonDet->setQuantity($result['Quantite_BL']);
-
+                    $livraisonDet->setLignCd($result['Ligne_CD']);
+                    $livraisonDet->setLignBl($result['Ligne_BL']);
+                    $livraisonDet->setDemandeDet($demandeDet);
 
                     $this->em->persist($livraisonDet);
                     $insertedCount++;
@@ -415,9 +422,9 @@ WHERE lg.Auto > ".$lastDemandeDetId."
 
             return new JsonResponse(['message' => 'LivraisonDet inserted successfully.', 'countInserted' => $insertedCount, 'countTotal' => count($livraisonDets)], 200);
 
-        } catch (\Throwable $th) {
-            return new JsonResponse('Erreur de connection..!!', 500);
-        }
+        // } catch (\Throwable $th) {
+        //     return new JsonResponse('Erreur de connection..!!', 500);
+        // }
     }
 
     #[Route('/api_livraison_lot', name: 'api_livraison_lot', options: ['expose' => true])]
@@ -428,7 +435,7 @@ WHERE lg.Auto > ".$lastDemandeDetId."
         $lastLivraisonLot = $this->em->getRepository(Interfacage::class)->findOneBy(["tabelName" => "pVLivraison_LT"]);
         $lastLivraisonLotId = $lastLivraisonLot ? $lastLivraisonLot->getLastId() : 0;
 
-        $sql = "SELECT  TOP 5000 lot.Auto, lot.ID_Livraison, lot.Lot, lot.Date_Sys, lot.Date_Expir, lot.Quantite_LT, lot.Quantite_RT, lot.ID_Nature_Prix, lot.Prix_Vente, lot.Prix_Achat, lot.Montant, lot.Taux, lot.ValeurA, lot.Marge
+        $sql = "SELECT  TOP 5000 lot.Auto, lot.ID_Livraison, lot.Lot, lot.Date_Sys, lot.Date_Expir, lot.Quantite_LT, lot.Quantite_RT, lot.ID_Nature_Prix, lot.Prix_Vente, lot.Prix_Achat, lot.Montant, lot.Taux, lot.ValeurA, lot.Marge, lot.Ligne_BL
         FROM (pVLivraison_LT lot
         INNER JOIN pVLivraison ON pVLivraison.ID_Livraison = lot.ID_Livraison)
         INNER JOIN pVCommande ON pVLivraison.ID_Commande = pVCommande.ID_Commande
@@ -441,6 +448,11 @@ WHERE lg.Auto > ".$lastDemandeDetId."
                 foreach ($results as $result) {
 
                     $livraisonCab = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result["ID_Livraison"]]);
+
+                    $livraisonDet = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["livraison" => $livraisonCab, "lignBl" => $result['Ligne_BL']]);
+
+                    // dd($livraisonDet);
+
                     if(!$livraisonCab){
                         // Save the missing demandeCab to sync it later
                         $this->saveInterfacageMissing("pVLivraison", "ID_Livraison", $result["ID_Livraison"]);
@@ -448,6 +460,9 @@ WHERE lg.Auto > ".$lastDemandeDetId."
                         $this->saveInterfacageMissing("pVLivraison_LT", "Auto", $result["Auto"]);
                         continue;
                     }
+
+                    // $livraisonDet = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["code" => $result["ID_Livraison"]]);
+
 
                     $livraisonLot = new LivraisonStockLot();
                     $livraisonLot->setIdAccess($result["Auto"]);
@@ -467,6 +482,8 @@ WHERE lg.Auto > ".$lastDemandeDetId."
                     $livraisonLot->setTva($result['Taux']);
                     $livraisonLot->setValeurA($result['ValeurA']);
                     $livraisonLot->setMerge($result['Marge']);
+                    $livraisonLot->setLignBl($result['Ligne_BL']);
+                    $livraisonLot->setLivraisonDet($livraisonDet);
 
 
                     $this->em->persist($livraisonLot);

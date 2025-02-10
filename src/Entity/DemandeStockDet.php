@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DemandeStockDetRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -55,6 +57,20 @@ class DemandeStockDet
 
     #[ORM\Column(nullable: true)]
     private ?int $idAccess = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $lignCd = null;
+
+    /**
+     * @var Collection<int, LivraisonStockDet>
+     */
+    #[ORM\OneToMany(targetEntity: LivraisonStockDet::class, mappedBy: 'demandeDet')]
+    private Collection $livraisonStockDets;
+
+    public function __construct()
+    {
+        $this->livraisonStockDets = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -225,6 +241,48 @@ class DemandeStockDet
     public function setIdAccess(?int $idAccess): static
     {
         $this->idAccess = $idAccess;
+
+        return $this;
+    }
+
+    public function getLignCd(): ?int
+    {
+        return $this->lignCd;
+    }
+
+    public function setLignCd(?int $lignCd): static
+    {
+        $this->lignCd = $lignCd;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LivraisonStockDet>
+     */
+    public function getLivraisonStockDets(): Collection
+    {
+        return $this->livraisonStockDets;
+    }
+
+    public function addLivraisonStockDet(LivraisonStockDet $livraisonStockDet): static
+    {
+        if (!$this->livraisonStockDets->contains($livraisonStockDet)) {
+            $this->livraisonStockDets->add($livraisonStockDet);
+            $livraisonStockDet->setDemandeDet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivraisonStockDet(LivraisonStockDet $livraisonStockDet): static
+    {
+        if ($this->livraisonStockDets->removeElement($livraisonStockDet)) {
+            // set the owning side to null (unless already changed)
+            if ($livraisonStockDet->getDemandeDet() === $this) {
+                $livraisonStockDet->setDemandeDet(null);
+            }
+        }
 
         return $this;
     }
