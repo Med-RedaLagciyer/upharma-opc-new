@@ -2,112 +2,84 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_fos-router_public_js_router_js-node_modules_jquery_dist_jquery_js-node_m-8d1563.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-0a0c14.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-3dfcf6.js",
-        "/build/vendors-node_modules_tabler_core_dist_js_demo-theme_min_js-node_modules_tabler_core_dist_js_d-fac39b.js",
-        "/build/node_modules_bpnetguy_webpack-inject-plugin_dist_webpack-inject-plugin_loader_js_id_webpack-i-327ca7.js",
-        "/build/app.js"
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/351.a6119758.js",
+        "/build/app.5a700feb.js"
       ],
       "css": [
-        "/build/vendors-node_modules_tabler_core_dist_js_demo-theme_min_js-node_modules_tabler_core_dist_js_d-fac39b.css",
-        "/build/app.css"
+        "/build/351.8bb31a85.css",
+        "/build/app.3286a070.css"
       ]
     },
     "security_register": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_fos-router_public_js_router_js-node_modules_jquery_dist_jquery_js-node_m-8d1563.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-0a0c14.js",
-        "/build/node_modules_bpnetguy_webpack-inject-plugin_dist_webpack-inject-plugin_loader_js_id_webpack-i-327ca7.js",
-        "/build/security_register.js"
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/security_register.f5d0ddec.js"
       ]
     },
     "synchronisation": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_fos-router_public_js_router_js-node_modules_jquery_dist_jquery_js-node_m-8d1563.js",
-        "/build/node_modules_bpnetguy_webpack-inject-plugin_dist_webpack-inject-plugin_loader_js_id_webpack-i-327ca7.js",
-        "/build/synchronisation.js"
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/synchronisation.ea8e1948.js"
       ]
     },
     "admin_users": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_fos-router_public_js_router_js-node_modules_jquery_dist_jquery_js-node_m-8d1563.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-0a0c14.js",
-        "/build/node_modules_bpnetguy_webpack-inject-plugin_dist_webpack-inject-plugin_loader_js_id_webpack-i-327ca7.js",
-        "/build/admin_users.js"
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/admin_users.55104918.js"
       ]
     },
     "pharmacy_liv_cree": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_fos-router_public_js_router_js-node_modules_jquery_dist_jquery_js-node_m-8d1563.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-0a0c14.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-3dfcf6.js",
-        "/build/node_modules_bpnetguy_webpack-inject-plugin_dist_webpack-inject-plugin_loader_js_id_webpack-i-327ca7.js",
-        "/build/pharmacy_liv_cree.js"
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/pharmacy_liv_cree.52af5238.js"
       ]
     },
     "pharmacy_liv_envoye": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_fos-router_public_js_router_js-node_modules_jquery_dist_jquery_js-node_m-8d1563.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-0a0c14.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-3dfcf6.js",
-        "/build/node_modules_bpnetguy_webpack-inject-plugin_dist_webpack-inject-plugin_loader_js_id_webpack-i-327ca7.js",
-        "/build/pharmacy_liv_envoye.js"
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/pharmacy_liv_envoye.9c73243b.js"
       ]
     },
     "pharmacy_liv_confirme": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_fos-router_public_js_router_js-node_modules_jquery_dist_jquery_js-node_m-8d1563.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-0a0c14.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-3dfcf6.js",
-        "/build/node_modules_bpnetguy_webpack-inject-plugin_dist_webpack-inject-plugin_loader_js_id_webpack-i-327ca7.js",
-        "/build/pharmacy_liv_confirme.js"
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/pharmacy_liv_confirme.56a41aba.js"
       ]
     },
     "pharmacy_liv_prete": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_fos-router_public_js_router_js-node_modules_jquery_dist_jquery_js-node_m-8d1563.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-0a0c14.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-3dfcf6.js",
-        "/build/node_modules_bpnetguy_webpack-inject-plugin_dist_webpack-inject-plugin_loader_js_id_webpack-i-327ca7.js",
-        "/build/pharmacy_liv_prete.js"
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/pharmacy_liv_prete.74e9b686.js"
       ]
     },
     "pharmacy_liv_livre": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_fos-router_public_js_router_js-node_modules_jquery_dist_jquery_js-node_m-8d1563.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-0a0c14.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-3dfcf6.js",
-        "/build/node_modules_bpnetguy_webpack-inject-plugin_dist_webpack-inject-plugin_loader_js_id_webpack-i-327ca7.js",
-        "/build/pharmacy_liv_livre.js"
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/pharmacy_liv_livre.6372c7b4.js"
       ]
     },
     "pharmacy_liv_future": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_fos-router_public_js_router_js-node_modules_jquery_dist_jquery_js-node_m-8d1563.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-0a0c14.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-3dfcf6.js",
-        "/build/node_modules_bpnetguy_webpack-inject-plugin_dist_webpack-inject-plugin_loader_js_id_webpack-i-327ca7.js",
-        "/build/pharmacy_liv_future.js"
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/pharmacy_liv_future.fff8c5c7.js"
       ]
     },
     "admin_rdv": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_fos-router_public_js_router_js-node_modules_jquery_dist_jquery_js-node_m-8d1563.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-0a0c14.js",
-        "/build/node_modules_bpnetguy_webpack-inject-plugin_dist_webpack-inject-plugin_loader_js_id_webpack-i-327ca7.js",
-        "/build/admin_rdv.js"
+        "/build/runtime.fc46f4c3.js",
+        "/build/2.593bb33b.js",
+        "/build/admin_rdv.8a522295.js"
       ]
     }
   }
