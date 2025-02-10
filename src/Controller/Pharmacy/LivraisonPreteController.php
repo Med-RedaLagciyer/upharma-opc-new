@@ -7,6 +7,7 @@ use App\Entity\UsModule;
 use App\Entity\LivraisonStatus;
 use App\Controller\ApiController;
 use App\Entity\LivraisonStockCab;
+use App\Service\UserActivityLogger;
 use App\Entity\LivraisonObservation;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,10 +21,12 @@ class LivraisonPreteController extends AbstractController
 {
     private $em;
     private $api;
-    public function __construct(ManagerRegistry $doctrine, ApiController $api)
+    private $activityLogger;
+    public function __construct(ManagerRegistry $doctrine, ApiController $api,UserActivityLogger $activityLogger)
     {
         $this->em = $doctrine->getManager();
         $this->api = $api;
+        $this->activityLogger = $activityLogger;
     }
 
     #[Route('/', name: 'app_pharmacy_livraison_prete')]
@@ -166,6 +169,8 @@ class LivraisonPreteController extends AbstractController
         $livraison->setPosition(NULL);
 
         $this->em->flush();
+
+        $this->activityLogger->statusLog($livraison);
 
         return new JsonResponse("Livraison est livrée.", 200);
     }

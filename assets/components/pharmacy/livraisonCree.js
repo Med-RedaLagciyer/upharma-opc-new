@@ -397,4 +397,52 @@ $(document).ready(function () {
         window.open(url, '_blank');
     })
 
+    $('body').on('click', '#extractionExcel', function (e) {
+        e.preventDefault();
+
+        let url = Routing.generate('app_pharmacy_exports_export_excel_livraison');
+
+        window.open(url, '_blank');
+    })
+
+    $('body').on('click', '#livMaj', async function (e) {
+        e.preventDefault();
+
+        livraison = $(this).attr('data-id');
+
+        try {
+            window.notyf.open({
+                type: "info",
+                message: "En cours..",
+                duration: 9000000,
+            });
+            const request = await axios.post(
+                Routing.generate('app_pharmacy_livraison_cree_observation',{
+                    livraison: livraison,
+                })
+            );
+            const response = await request.data;
+            window.notyf.dismissAll();
+            window.notyf.open({
+                type: "success",
+                message: response,
+                duration: 3000,
+            });
+
+            $('#observation_modal #observation').val("");
+            $('#observation_modal #observation').attr("data-livraisons", "");
+            $('#observation_modal').modal("hide")
+            table.ajax.reload();
+        } catch (error) {
+            window.notyf.dismissAll();
+            console.log(error);
+            if (error.response && error.response.data) {
+                const message = error.response.data.error;
+                window.notyf.error(message);
+            } else {
+                window.notyf.error('Something went wrong!');
+            }
+        }
+    })
+
 });

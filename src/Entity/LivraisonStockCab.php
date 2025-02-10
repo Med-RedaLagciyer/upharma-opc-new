@@ -106,12 +106,19 @@ class LivraisonStockCab
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateFuture = null;
 
+    /**
+     * @var Collection<int, UserStatusLogs>
+     */
+    #[ORM\OneToMany(targetEntity: UserStatusLogs::class, mappedBy: 'livraison')]
+    private Collection $userStatusLogs;
+
     public function __construct()
     {
         $this->livraisonStockDets = new ArrayCollection();
         $this->livraisonStockCabs = new ArrayCollection();
         $this->livraisonStockLot = new ArrayCollection();
         $this->livraisonObservations = new ArrayCollection();
+        $this->userStatusLogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -499,6 +506,36 @@ class LivraisonStockCab
     public function setDateFuture(?\DateTimeInterface $dateFuture): static
     {
         $this->dateFuture = $dateFuture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserStatusLogs>
+     */
+    public function getUserStatusLogs(): Collection
+    {
+        return $this->userStatusLogs;
+    }
+
+    public function addUserStatusLog(UserStatusLogs $userStatusLog): static
+    {
+        if (!$this->userStatusLogs->contains($userStatusLog)) {
+            $this->userStatusLogs->add($userStatusLog);
+            $userStatusLog->setLivraison($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserStatusLog(UserStatusLogs $userStatusLog): static
+    {
+        if ($this->userStatusLogs->removeElement($userStatusLog)) {
+            // set the owning side to null (unless already changed)
+            if ($userStatusLog->getLivraison() === $this) {
+                $userStatusLog->setLivraison(null);
+            }
+        }
 
         return $this;
     }

@@ -403,4 +403,12 @@ $(document).ready(function () {
 
         window.open(url, '_blank');
     })
+
+    $('body').on('click', '#extractionExcel', function (e) {
+        e.preventDefault();
+
+        let url = Routing.generate('app_pharmacy_exports_export_excel_livraison');
+
+        window.open(url, '_blank');
+    })
 });

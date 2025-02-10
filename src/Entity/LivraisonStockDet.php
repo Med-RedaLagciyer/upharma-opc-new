@@ -30,9 +30,24 @@ class LivraisonStockDet
     #[ORM\Column(nullable: true)]
     private ?int $idAccess = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $lignBl = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $lignCd = null;
+
+    /**
+     * @var Collection<int, LivraisonStockLot>
+     */
+    #[ORM\OneToMany(targetEntity: LivraisonStockLot::class, mappedBy: 'livraisonDet')]
+    private Collection $livraisonStockLots;
+
+    #[ORM\ManyToOne(inversedBy: 'livraisonStockDets')]
+    private ?DemandeStockDet $demandeDet = null;
+
     public function __construct()
     {
-
+        $this->livraisonStockLots = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -99,4 +114,71 @@ class LivraisonStockDet
 
         return $this;
     }
+
+    public function getLignBl(): ?int
+    {
+        return $this->lignBl;
+    }
+
+    public function setLignBl(?int $lignBl): static
+    {
+        $this->lignBl = $lignBl;
+
+        return $this;
+    }
+
+    public function getLignCd(): ?int
+    {
+        return $this->lignCd;
+    }
+
+    public function setLignCd(?int $lignCd): static
+    {
+        $this->lignCd = $lignCd;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LivraisonStockLot>
+     */
+    public function getLivraisonStockLots(): Collection
+    {
+        return $this->livraisonStockLots;
+    }
+
+    public function addLivraisonStockLot(LivraisonStockLot $livraisonStockLot): static
+    {
+        if (!$this->livraisonStockLots->contains($livraisonStockLot)) {
+            $this->livraisonStockLots->add($livraisonStockLot);
+            $livraisonStockLot->setLivraisonDet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivraisonStockLot(LivraisonStockLot $livraisonStockLot): static
+    {
+        if ($this->livraisonStockLots->removeElement($livraisonStockLot)) {
+            // set the owning side to null (unless already changed)
+            if ($livraisonStockLot->getLivraisonDet() === $this) {
+                $livraisonStockLot->setLivraisonDet(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDemandeDet(): ?DemandeStockDet
+    {
+        return $this->demandeDet;
+    }
+
+    public function setDemandeDet(?DemandeStockDet $demandeDet): static
+    {
+        $this->demandeDet = $demandeDet;
+
+        return $this;
+    }
+
 }

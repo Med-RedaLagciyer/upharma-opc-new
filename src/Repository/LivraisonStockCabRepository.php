@@ -41,17 +41,31 @@ class LivraisonStockCabRepository extends ServiceEntityRepository
     //        ;
     //    }
     public function findPositionByTheSameDemande($livraison): array
-       {
-           return $this->createQueryBuilder('l')
-               ->innerJoin('l.demande', 'demande')
-               ->innerJoin('l.position', 'position')
-               ->andWhere('demande.id = :id_demande')
-               ->andWhere('l.id != :id_livraison')
-               ->setParameter('id_livraison', $livraison->getId())
-               ->setParameter('id_demande', $livraison->getDemande()->getId())
-               ->orderBy('l.id', 'ASC')
-               ->getQuery()
-               ->getResult()
-           ;
-       }
+    {
+        return $this->createQueryBuilder('l')
+            ->innerJoin('l.demande', 'demande')
+            ->innerJoin('l.position', 'position')
+            ->andWhere('demande.id = :id_demande')
+            ->andWhere('l.id != :id_livraison')
+            ->setParameter('id_livraison', $livraison->getId())
+            ->setParameter('id_demande', $livraison->getDemande()->getId())
+            ->orderBy('l.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findLivraisonPharmacy(): array
+    {
+        return $this->createQueryBuilder('l')
+            ->innerJoin('l.demande', 'demandeCab')
+            ->innerJoin('demandeCab.client', 'client')
+            ->innerJoin('l.status', 'status')
+            ->where('demandeCab.active = 1')
+            ->andWhere('l.active = 1')
+            ->andWhere('client.id = 2694')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

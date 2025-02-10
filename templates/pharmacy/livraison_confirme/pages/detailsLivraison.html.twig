@@ -40,6 +40,7 @@
                 <th width="10%">Qte demandé</th>
                 <th width="5%">Qte livé</th>
                 <th width="10%">Qte RS</th>
+                <th width="10%">Retour</th>
             </tr>
         </thead>
         <tbody>
@@ -58,8 +59,29 @@
                 <td width="5%">{{qteDemande}}</td>
                 <td width="5%">{{detail.quantity}}</td>
                 <td width="5%">{{qteDemande - detail.quantity}}</td>
+                <td width="5%">Non</td>
             </tr>
         {% endfor %}
+        {% if livraison.livraisonStockCabs |length > 0 %}
+            {% for retour in livraison.livraisonStockCabs  %}
+                {% for retourDet in retour.livraisonStockDets  %}
+                    {% set ord = ord + 1 %}
+                    <tr style="background-color: #ffe6e9 !important;">
+                        <td width="3%">{{ord}}</td>
+                        <td width="50%"><span class="truncated-text" title="{{retourDet.article.titre}}">{{retourDet.article.titre|length > 100 ? retourDet.article.titre|slice(0, 100) ~ '...' : retourDet.article.titre}}</span></td>
+                        {% for demandeDet in livraison.demande.demandeStockDets %}
+                            {% if demandeDet.article.id == retourDet.article.id %}
+                                {% set qteDemande = demandeDet.qte %}
+                            {% endif %}
+                        {% endfor %}
+                        <td width="5%">{{qteDemande}}</td>
+                        <td width="5%">{{retourDet.quantity}}</td>
+                        <td width="5%">{{qteDemande - retourDet.quantity}}</td>
+                        <td width="5%">Oui</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
         </tbody>
     </table>
     <footer class="position-absolute bottom-0 mb-5">

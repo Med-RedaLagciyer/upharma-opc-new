@@ -24,9 +24,16 @@ class LivraisonStatus
     #[ORM\OneToMany(targetEntity: LivraisonStockCab::class, mappedBy: 'status')]
     private Collection $livraisonStockCabs;
 
+    /**
+     * @var Collection<int, UserStatusLogs>
+     */
+    #[ORM\OneToMany(targetEntity: UserStatusLogs::class, mappedBy: 'status')]
+    private Collection $userStatusLogs;
+
     public function __construct()
     {
         $this->livraisonStockCabs = new ArrayCollection();
+        $this->userStatusLogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -70,6 +77,36 @@ class LivraisonStatus
             // set the owning side to null (unless already changed)
             if ($livraisonStockCab->getStatus() === $this) {
                 $livraisonStockCab->setStatus(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserStatusLogs>
+     */
+    public function getUserStatusLogs(): Collection
+    {
+        return $this->userStatusLogs;
+    }
+
+    public function addUserStatusLog(UserStatusLogs $userStatusLog): static
+    {
+        if (!$this->userStatusLogs->contains($userStatusLog)) {
+            $this->userStatusLogs->add($userStatusLog);
+            $userStatusLog->setStatus($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserStatusLog(UserStatusLogs $userStatusLog): static
+    {
+        if ($this->userStatusLogs->removeElement($userStatusLog)) {
+            // set the owning side to null (unless already changed)
+            if ($userStatusLog->getStatus() === $this) {
+                $userStatusLog->setStatus(null);
             }
         }
 
