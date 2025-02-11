@@ -51,6 +51,12 @@ $(document).ready(function () {
         $("#list_Livraison_future").DataTable().clear().destroy();
     }
 
+    let filterValue = "today";
+    $('.filter-radio').on('change', function () {
+        filterValue = $(this).val();
+        table.ajax.reload();
+    });
+
     var livraison_array = [];
 
     var table = $("#list_Livraison_future").DataTable({
@@ -63,7 +69,7 @@ $(document).ready(function () {
             url: Routing.generate("app_pharmacy_livraison_future_list"),
             type: "get",
             data: function (d) {
-                // d.filterDate = filterValue;
+                d.filterDate = filterValue;
             },
             beforeSend: function (jqXHR) {
                 if (previousXhr) {
@@ -153,7 +159,11 @@ $(document).ready(function () {
             {
                 targets: 8,
                 render: function (data, type, full, meta) {
-                    return window.moment(data.date).format('YYYY-MM-DD');
+                    if(data){
+                        return window.moment(data.date).format('YYYY-MM-DD');
+                    }else{
+                        return "-";
+                    }
                     // console.log(data.date);
                 },
             },

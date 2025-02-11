@@ -37,7 +37,7 @@
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/pharmacy_liv_cree.52af5238.js"
+        "/build/pharmacy_liv_cree.b70737c3.js"
       ]
     },
     "pharmacy_liv_envoye": {
@@ -72,7 +72,7 @@
       "js": [
         "/build/runtime.fc46f4c3.js",
         "/build/2.593bb33b.js",
-        "/build/pharmacy_liv_future.fff8c5c7.js"
+        "/build/pharmacy_liv_future.517f24a8.js"
       ]
     },
     "admin_rdv": {
