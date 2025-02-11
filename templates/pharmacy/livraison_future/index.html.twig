@@ -33,9 +33,27 @@
 					</div>
 				</div>
 				<div class="row">
-                    <div class="col">
+                    <div class="col-md-2">
 						<div class="form-check form-check-inline px-2 ml-2">
 							<input class="form-control scanInput" type="text" name="scanInput" id="scanInput" placeholder="Scan Code Barre">
+						</div>
+					</div>
+                    <div class="col-md-2 m-1 mt-3 mb-0">
+						<div class="form-check form-check-inline">
+							<input class="form-check-input filter-radio" type="radio" name="filterDate" id="filterAujourdhui" value="today" checked>
+							<label class="form-check-label" for="filterAujourdhui">Aujourd'hui</label>
+						</div>
+					</div>
+					<div class="col-md-2 m-1 mt-3 mb-0">
+						<div class="form-check form-check-inline">
+							<input class="form-check-input filter-radio" type="radio" name="filterDate" id="filterDemain" value="tomorrow">
+							<label class="form-check-label" for="filterDemain">Demain</label>
+						</div>
+					</div>
+					<div class="col-md-2 m-1 mt-3 mb-0">
+						<div class="form-check form-check-inline">
+							<input class="form-check-input filter-radio filterDate" type="radio" name="filterDate" id="filterTous" value="all">
+							<label class="form-check-label" for="filterTous">Tous</label>
 						</div>
 					</div>
 				</div>

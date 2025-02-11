@@ -7,7 +7,9 @@ $(document).ready(function () {
         e.preventDefault();
         if (e.key === 'Enter') {
 
-            const inputValue = $('#scanInput').val().trim(); // Get input value
+            const inputValue = $('#scanInput').val(); // Get input value
+            console.log(inputValue);
+            return
             if (!inputValue) {
                 window.notyf.dismissAll();
                 window.notyf.error("Merci de scanner le codebarre ou bien tappez le code Livraison.");
