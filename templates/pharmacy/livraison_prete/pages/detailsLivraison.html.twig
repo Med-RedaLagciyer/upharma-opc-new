@@ -95,11 +95,13 @@
                         </a>
                     {% endif %}
                 </div>
-                <div class="col-md-1 float-right">
-                    <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 observation">
-                        <i class="fa fa-solid fa-edit"></i>&nbsp;
-                    </a>
-                </div>
+                {% if operations|filter(o => o.id == 26)|length > 0 %}
+                    <div class="col-md-1 float-right">
+                        <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 observation">
+                            <i class="fa fa-solid fa-edit"></i>&nbsp;
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </footer>
