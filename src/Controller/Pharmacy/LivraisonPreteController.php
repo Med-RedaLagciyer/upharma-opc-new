@@ -136,7 +136,7 @@ class LivraisonPreteController extends AbstractController
             return new JsonResponse(['error' => 'Aucune Livraison trouvée.'], 404);
         }
 
-        $operations = $this->api->check($this->getUser(), 'app_pharmacy_livraison_confirme', $this->em, $request);
+        $operations = $this->api->check($this->getUser(), 'app_pharmacy_livraison_prete', $this->em, $request);
         $detailLivraison = $this->render("pharmacy/livraison_prete/pages/detailsLivraison.html.twig", [
             'livraison' => $livraison,
             'operations' => $operations,
