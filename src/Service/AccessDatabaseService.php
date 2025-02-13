@@ -11,8 +11,8 @@ class AccessDatabaseService
 
     public function __construct(string $dsn = null, string $username = '', string $password = '')
     {
-        $this->dsn = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=C:\\Users\\DELL\\Desktop\\Aceess\\AFRIC_MED_DB.accdb;';
-        // $this->dsn = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=\\\172.16.0.15\\afric_med\\AFRIC_MED_DB.accdb;charset=UTF-8;Uid=hcz\DEV;Pwd=123;';
+        // $this->dsn = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=C:\\Users\\DELL\\Desktop\\Aceess\\AFRIC_MED_DB.accdb;';
+        $this->dsn = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=\\\172.16.0.15\\afric_med\\AFRIC_MED_DB.accdb;charset=UTF-8;Uid=hcz\DEV;Pwd=123;';
         // $this->username = 'dev  ';
         // $this->password = '123';
 
