@@ -92,35 +92,37 @@
     <footer class="position-absolute bottom-0 mb-5">
         <div class="container-xl">
             <div class="row" style="justify-content: end;">
-                <div class="col-md-8 float-right">
-                    <div class="" style="float:right;margin-top: 7px;">
-                        <label class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="etatInput" id="frigorifiee" value="Séc" checked="">
-                        <span class="form-check-label">Séc</span>
-                        </label>
-                        <label class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="etatInput" id="frigorifiee" value="Frigorifiée">
-                        <span class="form-check-label">Frigorifiée</span>
-                        </label>
-                        <label class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="etatInput" id="frigorifiee" value="Frigorifiée + Séc">
-                        <span class="form-check-label">Frigorifiée + Séc</span>
-                        </label>
+                {% if operations|filter(o => o.id == 5)|length > 0 %}
+                    <div class="col-md-8 float-right">
+                        <div class="" style="float:right;margin-top: 7px;">
+                            <label class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="etatInput" id="frigorifiee" value="Séc" checked="">
+                            <span class="form-check-label">Séc</span>
+                            </label>
+                            <label class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="etatInput" id="frigorifiee" value="Frigorifiée">
+                            <span class="form-check-label">Frigorifiée</span>
+                            </label>
+                            <label class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="etatInput" id="frigorifiee" value="Frigorifiée + Séc">
+                            <span class="form-check-label">Frigorifiée + Séc</span>
+                            </label>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    {% if operations|filter(o => o.id == 5)|length > 0 %}
-                        <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 ModalEnvoyerLiv">
-                            <i class="fa fa-paper-plane"></i>&nbsp;
-                            Envoyer
+                    <div class="col-md-3">
+                            <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 ModalEnvoyerLiv">
+                                <i class="fa fa-paper-plane"></i>&nbsp;
+                                Envoyer
+                            </a>
+                    </div>
+                {% endif %}
+                {% if operations|filter(o => o.id == 40)|length > 0 %}
+                    <div class="col-md-1 float-right">
+                        <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 observation">
+                            <i class="fa fa-solid fa-edit"></i>&nbsp;
                         </a>
-                    {% endif %}
-                </div>
-                <div class="col-md-1 float-right">
-                    <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 observation">
-                        <i class="fa fa-solid fa-edit"></i>&nbsp;
-                    </a>
-                </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </footer>

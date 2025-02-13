@@ -1,23 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>
-            {% block title %}Authentification{% endblock %}
-        </title>
-        <link rel="shortcut icon" href="{{asset('/img/icon-u.png')}}" />
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
-        <style>
-            @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Oswald:wght@200..700&display=swap");
 
+/*
+ *
+ *   INSPINIA - Responsive Admin Theme
+ *   version 2.9.2
+ *
+*/
 
+/*@font-face {
+    font-family: 'SEGOEUIL';
+    src: url('../fonts/proxima/Proxima Nova Alt Light.otf') format('truetype');
+}
+
+
+@font-face {
+    font-family: 'SEGOEUIL';
+    src: url('../fonts/proxima/ProximaNova-Regular.otf') format('truetype');
+    font-weight : bold ; 
+
+}
+
+@font-face {
+    font-family: 'SEGOEUIL';
+    src: url('../fonts/proxima/ProximaNova-Regular.otf') format('truetype');
+    font-weight : 600 ; 
+
+}*/
 body {
    text-transform: uppercase !important;
-   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .login__error {
   text-align: center;
@@ -10020,8 +10032,8 @@ div.DTCR_pointer {
 .dt-buttons > button {
   /*    background-color: #1ab394 !important;
           border-color: #1ab394 !important;
-          color:#fff ;
-
+          color:#fff ; 
+      
       color: #2f4050; */
 
   background-color: #999c9e;
@@ -10084,7 +10096,7 @@ div.DTCR_pointer {
   /*    display: inline-block;
           margin-left: 0.255em;
           vertical-align: 0.255em;
-
+          
           border-top: 0.3em solid;
           border-right: 0.3em solid transparent;
           border-bottom: 0;
@@ -10308,12 +10320,12 @@ div.DTCR_pointer {
     padding: 5px 4px 0px 4px;
 }
 .table  tfoot i {
-    width: auto !important ;
-    height: auto !important;
+    width: auto !important ; 
+    height: auto !important; 
 }
 
 .table  tfoot tr  {
-    background: #f5f5f6 ;
+    background: #f5f5f6 ; 
 }*/
 .fixed-top-navigation-button {
   background: #fff;
@@ -10578,7 +10590,7 @@ div.DTCR_pointer {
     padding-top: 8px;
 }
 .table-detail>tfoot>tr>th>form>div>.table-striped>tbody>tr>td textarea {
-
+  
     padding: 11px 3px;
     width: 300px;
 }*/
@@ -15136,80 +15148,3 @@ label {
 .border-danger {
   border-color: red !important; /* Set border color to red */
 }
-        </style>
-    </head>
-    <body class="gray-bg">
-
-		<div class="loginColumns animated fadeInDown">
-			<div class="row" style="margin-right: -15px !important;margin-left: -15px !important;">
-
-				<div class="col-md-7"><br><br><br><br><br><br><br><br><br><br>
-					<h2 class="font-bold" style="font-size:24px !important">Upharma</h2>
-					<div class="font-bold" style="color:#949494;font-size:14px !important">
-
-						<p style="color:#949494;font-size:14px !important">
-							UPHARMA est un progiciel de gestion intégré (PGI, ERP en anglais) développé pour les petites et moyennes entreprises, les indépendants, auto-entrepreneurs ou les associations.
-
-                            À savoir la gestion des clients, fournisseurs, devis, commandes, factures, stocks, comptabilité. L’architecture d’UPHARMA est modulaire. Il se positionne sur la facilité d'installation et la simplicité d'utilisation.
-
-                            UPHARMA fonctionne par activation de modules. Vous n'activez et ne voyez que les fonctionnalités (modules) dont vous avez besoin.
-						</p>
-					</div>
-
-				</div>
-				<div class="col-md-5">
-					<div class="test row">
-						<div class="col-1"></div>
-
-						<div class="col-12">
-							<centre>
-									<img src="static/logo-upharma.png" alt="image" class="" style="vertical-align: middle; font-family: Oswald,sans-serif;font-size: 40px;font-weight: bold;color: #CDDFF2;width: 90%;
-    margin-top: 5.5rem; ">
-
-							</center>
-
-						</div>
-
-
-					</div>
-					<div class="ibox-content">
-
-
-						<form method="post" style="padding:10px">
-							{% if error %}
-								<div class="login__error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-							{% endif %}
-
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Username" value="{{ last_username }}" name="username" id="inputUsername" autocomplete="username" required autofocus style="padding:6px;margin-bottom:10px">
-							</div>
-
-							<div class="form-group">
-								<input type="password" class="form-control" name="password" placeholder="Password" id="inputPassword" required style="padding:6px">
-							</div>
-							<br/>
-							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-
-							<button class="btn btn-primary block full-width m-b" type="submit">
-								Connexion
-							</button>
-						</form>
-
-					</div>
-				</div>
-
-			</div><hr/>
-			<div class="row">
-				<div class="col-md-6" style="
-																														    font-size: 11px;
-																														">
-					Universal , scientific system & software
-				</div>
-				<div class="col-md-6 text-right">
-					<small>© 2024</small>
-				</div>
-			</div>
-
-		</body>
-</html>
