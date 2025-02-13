@@ -4,8 +4,8 @@ $(document).ready(function () {
     $('#scanInput').focus();
 
     $('#scanInput').on('keypress', async function (e) {
-        e.preventDefault();
         if (e.key === 'Enter') {
+            e.preventDefault();
 
             const inputValue = $('#scanInput').val().trim(); // Get input value
             if (!inputValue) {
@@ -30,6 +30,7 @@ $(document).ready(function () {
                 $("#detailsModal #detailsBody").html(response["detailLivraison"]);
 
                 $("#list_details").DataTable();
+                $("#list_details_demande").DataTable();
 
             } catch (error) {
                 window.notyf.dismissAll();
@@ -220,6 +221,7 @@ $(document).ready(function () {
             $("#detailsModal #detailsBody").html(response["detailLivraison"]);
 
             $("#list_details").DataTable();
+            $("#list_details_demande").DataTable();
 
         } catch (error) {
             window.notyf.dismissAll();
@@ -257,19 +259,45 @@ $(document).ready(function () {
 
             table.ajax.reload();
 
-            if(window.globalActions.some(action => action.idOp === 13)){
-                const button = $('body .ModalConfirmerLiv');
-                const etatContainer = $('body .etatContainer');
-                if (button) {
-                    button.removeClass("ModalConfirmerLiv");
-                    button.removeClass("btn-primary");
-                    button.addClass("ModalPreteLiv");
-                    button.addClass("btn-secondary");
-                    button.html(`<i class="fa fa-box-open"></i>&nbsp; Prêt pour enlèvement`);
-                    etatContainer.html(``);
+            // if(window.globalActions.some(action => action.idOp === 13)){
+            //     const button = $('body .ModalConfirmerLiv');
+            //     const etatContainer = $('body .etatContainer');
+            //     if (button) {
+            //         button.removeClass("ModalConfirmerLiv");
+            //         button.removeClass("btn-primary");
+            //         button.addClass("ModalPreteLiv");
+            //         button.addClass("btn-secondary");
+            //         button.html(`<i class="fa fa-box-open"></i>&nbsp; Prêt pour enlèvement`);
+            //         etatContainer.html(``);
+            //     }
+            // }else{
+            //     $('#detailsModal').modal("hide")
+            // }
+
+            const hasAction13 = window.globalActions.some(action => action.idOp === 13);
+            const hasAction14 = window.globalActions.some(action => action.idOp === 14);
+            const button = $('body .ModalConfirmerLiv');
+            const etatContainer = $('body .etatContainer');
+
+            if (hasAction13) {
+                if (button.length) {
+                    button.removeClass("ModalConfirmerLiv btn-primary")
+                          .addClass("ModalPreteLiv btn-primary")
+                          .html(`<i class="fa fa-box-open"></i>&nbsp; Prêt pour enlèvement`);
                 }
-            }else{
-                $('#detailsModal').modal("hide")
+                etatContainer.html('');
+            }
+
+            if (hasAction14) {
+                etatContainer.append(`
+                    <button class="btn btn-warning w-80 ModalFutureLiv" data-id="${id_livraison}" style="float: right;">
+                        <i class="fa-solid fa-hourglass-half"></i>&nbsp;Future Commande
+                    </button>
+                `);
+            }
+
+            if (!hasAction13 && !hasAction14) {
+                $('#detailsModal').modal("hide");
             }
 
         } catch (error) {
@@ -283,6 +311,55 @@ $(document).ready(function () {
             }
         }
     }
+
+    $('body').on('click', '.ModalFutureLiv', async function (e) {
+        e.preventDefault();
+        $('#future_modal #date').attr("data-livraison", $(this).attr('data-id'));
+        $('#future_modal').modal("show")
+    })
+
+    $('body').on('click', '#saveFuture', async function (e) {
+        e.preventDefault();
+
+        let date = $('#future_modal #date').val();
+        let livraison_id = $('#future_modal #date').attr("data-livraison");
+
+        try {
+            window.notyf.open({
+                type: "info",
+                message: "En cours..",
+                duration: 9000000,
+            });
+            const request = await axios.post(
+                Routing.generate('app_pharmacy_livraison_confirme_future',{
+                    livraison: livraison_id,
+                    date: date,
+                })
+            );
+            const response = await request.data;
+            window.notyf.dismissAll();
+            window.notyf.open({
+                type: "success",
+                message: response,
+                duration: 3000,
+            });
+
+            $('#future_modal #date').val("");
+            $('#future_modal #date').attr("data-livraison", "");
+            $('#future_modal').modal("hide")
+            table.ajax.reload();
+            $('#detailsModal').modal("hide");
+        } catch (error) {
+            window.notyf.dismissAll();
+            console.log(error);
+            if (error.response && error.response.data) {
+                const message = error.response.data.error;
+                window.notyf.error(message);
+            } else {
+                window.notyf.error('Something went wrong!');
+            }
+        }
+    });
 
     $('body').on('click', '.ModalConfirmerLiv', async function (e) {
         e.preventDefault();

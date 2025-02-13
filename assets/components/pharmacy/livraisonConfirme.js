@@ -4,8 +4,8 @@ $(document).ready(function () {
     $('#scanInput').focus();
 
     $('#scanInput').on('keypress', async function (e) {
-        e.preventDefault();
         if (e.key === 'Enter') {
+            e.preventDefault();
 
             const inputValue = $('#scanInput').val().trim(); // Get input value
             if (!inputValue) {
@@ -30,6 +30,7 @@ $(document).ready(function () {
                 $("#detailsModal #detailsBody").html(response["detailLivraison"]);
 
                 $("#list_details").DataTable();
+                $("#list_details_demande").DataTable();
 
             } catch (error) {
                 window.notyf.dismissAll();
@@ -218,6 +219,7 @@ $(document).ready(function () {
             $("#detailsModal #detailsBody").html(response["detailLivraison"]);
 
             $("#list_details").DataTable();
+            $("#list_details_demande").DataTable();
 
         } catch (error) {
             window.notyf.dismissAll();

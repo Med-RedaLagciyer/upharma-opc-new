@@ -1,0 +1,235 @@
+{# <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet"> #}
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono" rel="stylesheet">
+
+<style type="text/Css">
+
+    *,body {
+        font-family: 'Courier';
+        font-size: 13px;
+        text-transform: uppercase;
+    }
+
+    .header-title{
+        font-family: "DM Sans", sans-serif;
+        color:#D2D2D4
+    }
+
+    .main-title{
+        font-family: "DM Sans", sans-serif;
+        color:#0C151C
+    }
+
+    .footer p{
+        font-size: 9px;
+        color:#747478
+    }
+</style>
+<br>
+<br>
+<br>
+<table style="width: 100%;table-layout: fixed;" align="center" class="test"cellspacing="0">
+	<tbody>
+		<tr>
+			<td style="width: 80%; text-align: left; vertical-align: middle;">
+				<div style="height: 100%; ">
+					<span style="font-size: 32px; text-transform: uppercase; font-weight: bold; position: absolute;" class="main-title">
+						SORTIE DE STOCK
+					</span>
+				</div>
+			</td>
+			<td style="width: 20%; text-align: right;">
+				<table style="">
+                    <tr>
+                        <td style="text-align:center">
+                            <barcode code="{{ livraison.demande.code }}" type="C39" size="0.5" height="2.0" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100%; font-size: 11px;text-align:start; padding-left: 7px">
+                            <b>LV&nbsp;&nbsp; :
+                            </b>&nbsp;
+                            {{ livraison.code|upper }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100%; font-size: 11px;text-align:start; padding-left: 7px">
+                            <b>DM&nbsp;&nbsp; :
+                            </b>&nbsp;
+                            {{ livraison.demande.code }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100%; font-size: 11px;text-align:start; padding-left: 7px">
+                            <b>DATE  :
+                            </b>&nbsp;
+                            {{ livraison.date ? livraison.date|date("d/m/Y") : "-"}}
+                        </td>
+                    </tr>
+                </table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<table cellspacing="0" style="width: 100%; text-align: left; font-size: 11px;text-transform: uppercase;">
+	<tbody>
+		<tr>
+            <td><b>DATE  &nbsp;&nbsp;&nbsp;:</b>&nbsp;<span style="color:#747478">{{livraison.demande.client ? livraison.demande.client.nom : '-'}}</span></td>
+            <td></td>
+            <td><b>PATIENT :</b>&nbsp;<span style="color:#747478">{{livraison.demande.patient ? livraison.demande.patient : '-'}}</span></td>
+		</tr>
+		<tr>
+            <td><b>DOSSIER  :</b>&nbsp;<span style="color:#747478">{{livraison.demande.dossierPatient ? livraison.demande.dossierPatient : '-'}}</span></td>
+            <td></td>
+            <td></td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<table cellspacing="0" style="width: 100%; text-align: left; font-size: 11px; margin-top: 29px">
+    <tr style="line-height: 20px;">
+        <td style="width: 16%;">
+            <span style="font-weight:bold">
+                DUREE TRAITEMENT &nbsp;&nbsp;:</span>
+        </td>
+        <td style="width: 14%;">
+            <img src="static/nochecked.png" width="10px" height="10px" class="logo" alt="Logo"/>
+            <span style="font-weight:bold;text-transform: uppercase;">Moins d'1 mois</span>
+        </td>
+        <td style="width: 8%;">
+            <img src="static/nochecked.png" width="10px" height="10px" class="logo" alt="Logo"/>
+            <span style="font-weight:bold;text-transform: uppercase;">Mois 1</span>
+        </td>
+        <td style="width: 8%;">
+            <img src="static/nochecked.png" width="10px" height="10px" class="logo" alt="Logo"/>
+            <span style="font-weight:bold;text-transform: uppercase;">Mois 2</span>
+        </td>
+        <td style="width: 8%;">
+            <img src="static/nochecked.png" width="10px" height="10px" class="logo" alt="Logo"/>
+            <span style="font-weight:bold;text-transform: uppercase;">Mois 3</span>
+        </td>
+        <td style="width: 8%;">
+            <img src="static/nochecked.png" width="10px" height="10px" class="logo" alt="Logo"/>
+            <span style="font-weight:bold;text-transform: uppercase;">Mois 4</span>
+        </td>
+        <td style="width: 8%;">
+            <img src="static/nochecked.png" width="10px" height="10px" class="logo" alt="Logo"/>
+            <span style="font-weight:bold;text-transform: uppercase;">Mois 5</span>
+        </td>
+        <td style="width: 8%;">
+            <img src="static/nochecked.png" width="10px" height="10px" class="logo" alt="Logo"/>
+            <span style="font-weight:bold;text-transform: uppercase;">Mois 6</span>
+        </td>
+    </tr>
+    <tr style="line-height: 20px;">
+        <td style="width: 16%; padding-top:30px">
+            <span style="font-weight:bold">
+                TYPE LIVRAISON &nbsp;&nbsp;&nbsp;&nbsp;:</span>
+        </td>
+        <td style=" padding-top:30px">
+             {% if livraisonPartiel == 0 %}
+                <img src="static/checked.png" width="10px" height="10px" class="logo" alt="Logo"/>
+            {% else %}
+                <img src="static/nochecked.png" width="10px" height="10px" class="logo" alt="Logo"/>
+            {% endif %}
+            <span style="font-weight:bold;text-transform: uppercase;">TOTAL</span>
+        </td>
+        <td style="width: 8%; padding-top:30px">
+             {% if livraisonPartiel == 0 %}
+                <img src="static/nochecked.png" width="10px" height="10px" class="logo" alt="Logo"/>
+            {% else %}
+                <img src="static/checked.png" width="10px" height="10px" class="logo" alt="Logo"/>
+            {% endif %}
+            <span style="font-weight:bold;text-transform: uppercase;">PATIELLE</span>
+        </td>
+        <td style="width: 8%;">
+        </td>
+        <td style="width: 8%;">
+        </td>
+        <td style="width: 8%;">
+        </td>
+        <td style="width: 8%;">
+        </td>
+        <td style="width: 8%;">
+        </td>
+    </tr>
+</table>
+<br>
+<table cellspacing="0" style="width: 100%; text-align: left; font-size: 12px">
+    <tr style="color:black; padding: 5 10px">
+        <td >
+            <h5 style="padding: 5px 10px ; text-transform: uppercase;font-weight: bold;font-size: 15px">DETAILS :</h5>
+        </td>
+    </tr>
+</table>
+<table class="" style="width: 100% ; margin-top:6px" cellspacing="0">
+    <thead>
+        <tr style="background-color: #C9CCD5; color:black; font-size: 6px;">
+            <th style="width: 5%;padding: 1px;font-size: 9px;">#</th>
+            <th style="width: 20%;padding: 1px;font-size: 9px;">CODE</th>
+            <th style="width: 40%;padding: 1px;font-size: 9px;">ARTICLE</th>
+            <th style="width: 10%;padding: 1px;padding-right: 3px;text-align: center;font-size: 9px;">qte livré</th>
+            <th style="width: 2%;padding: 1px;text-align: center; border:none; background-color: #fff"></th>
+            <th style="width: 10%;padding: 1px;text-align: center;font-size: 9px;">qte demandé</th>
+            <th style="width: 10%;padding: 1px;text-align: center;font-size: 9px;">total livraison</th>
+            <th style="width: 10%;padding: 1px;text-align: center;font-size: 9px;">reste</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% set prixTotHT = 0 %}
+        {% set prixTotNet = 0 %}
+        {% set TotTva = 0 %}
+        {% set baseTVA = 0 %}
+        {% for key , article in articles  %}
+            {% set  key = key + 1  %}
+            <tr>
+                <td style="width: 5%;text-transform:uppercase;padding: 3px;font-size: 9px;text-align: center;">{{key}}</td>
+                <td style="width: 10%;text-transform:uppercase;padding: 3px;font-size: 9px;text-align: center;">{{ article.code|upper }}</td>
+                <td style="width: 40%;text-transform:uppercase;padding: 3px;font-size: 9px;text-align: left;">{{ article.designation|upper }}</td>
+                <td style="width: 5%;text-transform:uppercase;padding: 3px;font-size: 11px;text-align: center;font-weight:bold;">{{ article.qteLivre}}</td>
+                <td style="width: 2%;text-transform:uppercase;padding: 3px;font-size: 9px;text-align: center;"></td>
+                <td style="width: 2%;text-transform:uppercase;padding: 3px;font-size: 9px;text-align: center;font-style: italic;">{{ article.qteDemande}}</td>
+                <td style="width: 5%;text-transform:uppercase;padding: 3px;font-size: 9px;text-align: center;font-style: italic;">{{ article.totalLivraison}}</td>
+                <td style="width: 5%;text-transform:uppercase;padding: 3px;font-size: 9px;text-align: center;font-style: italic;">{{ article.reste}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+<br>
+<table cellspacing="0" style="width: 100%; text-align: left; font-size: 12px">
+    <tr>
+        <td>
+            <h5 style="padding: 0px 4px  ; text-transform: uppercase;font-weight: bold;font-size: 13px">VALIDATION RECEPTION PATIENT :</td>
+        </td>
+    </tr>
+</table>
+<br>
+<br>
+<table cellspacing="0" style="width: 100%; text-align: left; font-size: 11px; margin-top: 2px">
+    <tr style="line-height: 20px;">
+        <td style="width: 10%;"></td>
+        <td style="width: 15%;font-weight:bold; font-size: 10px;text-align:right">
+            NOM &nbsp;&nbsp;&nbsp;:
+        </td>
+        <td style="width: 25%;"></td>
+        <td rowspan="3" style="width: 20%; border:solid 0.5px grey;vertical-align: top; text-align: left;">
+            <span style="font-size: 7px; font-weight:bold; font-style: italic; padding: 0; margin-top: -7px; display: block;">SIGNATURE CLIENT:</span>
+        </td>
+    </tr>
+    <tr style="line-height: 20px;">
+        <td style="width: 10%;"></td>
+        <td style="width: 15%;font-weight:bold;font-size: 10px;text-align:right">
+            PRENOM&nbsp;:
+        </td>
+        <td style="width: 25%;"></td>
+    </tr>
+    <tr style="line-height: 20px;">
+        <td style="width: 10%;"></td>
+        <td style="width: 15%;font-weight:bold;font-size: 10px;text-align:right">
+            CIN &nbsp;&nbsp;&nbsp;:
+        </td>
+        <td style="width: 25%;"></td>
+    </tr>
+</table>

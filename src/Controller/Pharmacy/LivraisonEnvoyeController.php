@@ -136,6 +136,11 @@ class LivraisonEnvoyeController extends AbstractController
             return new JsonResponse(['error' => 'Aucune Livraison trouvée.'], 404);
         }
 
+        if ($livraison->getStatus()->getId() != 2) {
+            return new JsonResponse(['error' => 'Aucune Livraison trouvée.'], 404);
+        }
+
+
         $operations = $this->api->check($this->getUser(), 'app_pharmacy_livraison_envoye', $this->em, $request);
         $detailLivraison = $this->render("pharmacy/livraison_envoye/pages/detailsLivraison.html.twig", [
             'livraison' => $livraison,

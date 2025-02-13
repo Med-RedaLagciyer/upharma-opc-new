@@ -30,6 +30,29 @@
         </div>
     </div>
 
+    <div class="hr-text" style="margin: 20px 0 6px 0 !important;">Détails Demande</div>
+
+    <table id="list_details_demande" class="table custom-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th width="3%">#</th>
+                <th width="5%">Article</th>
+                <th width="10%">Qte demandé</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set ord = 0 %}
+        {% for detail in livraison.demande.demandeStockDets  %}
+            {% set ord = ord + 1 %}
+            <tr>
+                <td width="3%">{{ord}}</td>
+                <td width="50%"><span class="truncated-text" title="{{detail.article.titre}}">{{detail.article.titre|length > 100 ? detail.article.titre|slice(0, 100) ~ '...' : detail.article.titre}}</span></td>
+                <td width="5%">{{detail.qte}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
     <div class="hr-text" style="margin: 20px 0 6px 0 !important;">Détails Livraison</div>
 
     <table id="list_details" class="table custom-striped table-bordered" style="width:100%">

@@ -4,12 +4,12 @@ $(document).ready(function () {
     $('#scanInput').focus();
 
     $('#scanInput').on('keypress', async function (e) {
-        e.preventDefault();
         if (e.key === 'Enter') {
+            e.preventDefault();
 
-            const inputValue = $('#scanInput').val(); // Get input value
-            console.log(inputValue);
-            return
+            const inputValue = $(this).val().trim(); // Get input value
+            // console.log(inputValue);
+            // return
             if (!inputValue) {
                 window.notyf.dismissAll();
                 window.notyf.error("Merci de scanner le codebarre ou bien tappez le code Livraison.");
@@ -32,6 +32,7 @@ $(document).ready(function () {
                 $("#detailsModal #detailsBody").html(response["detailLivraison"]);
 
                 $("#list_details").DataTable();
+                $("#list_details_demande").DataTable();
 
             } catch (error) {
                 window.notyf.dismissAll();
@@ -205,11 +206,11 @@ $(document).ready(function () {
         e.preventDefault();
         let id_livraison = $(this).attr('data-id');
         $("#detailsModal #detailsBody").html("");
-            $("#detailsModal #detailsBody").html(`<main class="d-flex justify-content-center align-items-center flex-wrap">
-                <div class="spinner-grow" role="status"></div>
-                <div class="spinner-grow" role="status"></div>
-                <div class="spinner-grow" role="status"></div>
-            </main>`);
+        $("#detailsModal #detailsBody").html(`<main class="d-flex justify-content-center align-items-center flex-wrap">
+            <div class="spinner-grow" role="status"></div>
+            <div class="spinner-grow" role="status"></div>
+            <div class="spinner-grow" role="status"></div>
+        </main>`);
         $('#detailsModal').modal("show")
         try {
             const request = await axios.post(
@@ -220,6 +221,7 @@ $(document).ready(function () {
             $("#detailsModal #detailsBody").html(response["detailLivraison"]);
 
             $("#list_details").DataTable();
+            $("#list_details_demande").DataTable();
 
         } catch (error) {
             window.notyf.dismissAll();
@@ -407,10 +409,11 @@ $(document).ready(function () {
         window.open(url, '_blank');
     })
 
-    $('body').on('click', '#livMaj', async function (e) {
+    $('body').on('click', '.livMaj', async function (e) {
         e.preventDefault();
+        // alert('hi');
 
-        livraison = $(this).attr('data-id');
+        livraison_id = $(this).attr('data-id');
 
         try {
             window.notyf.open({
@@ -419,8 +422,8 @@ $(document).ready(function () {
                 duration: 9000000,
             });
             const request = await axios.post(
-                Routing.generate('app_pharmacy_livraison_cree_observation',{
-                    livraison: livraison,
+                Routing.generate('app_pharmacy_misc_maj',{
+                    livraison_id: livraison_id,
                 })
             );
             const response = await request.data;
@@ -431,9 +434,36 @@ $(document).ready(function () {
                 duration: 3000,
             });
 
-            $('#observation_modal #observation').val("");
-            $('#observation_modal #observation').attr("data-livraisons", "");
-            $('#observation_modal').modal("hide")
+            $("#detailsModal #detailsBody").html("");
+            $("#detailsModal #detailsBody").html(`<main class="d-flex justify-content-center align-items-center flex-wrap">
+                <div class="spinner-grow" role="status"></div>
+                <div class="spinner-grow" role="status"></div>
+                <div class="spinner-grow" role="status"></div>
+            </main>`);
+            $('#detailsModal').modal("show")
+            try {
+                const request = await axios.post(
+                    Routing.generate('app_pharmacy_livraison_cree_details', { idLivraison: livraison_id })
+                );
+                const response = await request.data;
+                $("#detailsModal #detailsBody").html("");
+                $("#detailsModal #detailsBody").html(response["detailLivraison"]);
+
+                $("#list_details").DataTable();
+                $("#list_details_demande").DataTable();
+
+            } catch (error) {
+                window.notyf.dismissAll();
+                console.log(error.response.data);
+                if (error.response && error.response.data) {
+                    $('#detailsModal').modal("hide")
+                    const message = error.response.data.error;
+                    window.notyf.error(message);
+                } else {
+                    window.notyf.error('Something went wrong!');
+                }
+            }
+
             table.ajax.reload();
         } catch (error) {
             window.notyf.dismissAll();
