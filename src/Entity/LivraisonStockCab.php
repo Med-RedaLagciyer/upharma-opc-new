@@ -52,7 +52,7 @@ class LivraisonStockCab
     /**
      * @var Collection<int, LivraisonStockLot>
      */
-    #[ORM\OneToMany(targetEntity: LivraisonStockLot::class, mappedBy: 'livraison')]
+    #[ORM\OneToMany(targetEntity: LivraisonStockLot::class, mappedBy: 'livraisonCab')]
     private Collection $livraisonStockLot;
 
     /**

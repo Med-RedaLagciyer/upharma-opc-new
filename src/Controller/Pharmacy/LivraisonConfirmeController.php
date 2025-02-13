@@ -133,6 +133,9 @@ class LivraisonConfirmeController extends AbstractController
         if (!$livraison) {
             return new JsonResponse(['error' => 'Aucune Livraison trouvée.'], 404);
         }
+        if ($livraison->getStatus()->getId() != 3) {
+            return new JsonResponse(['error' => 'Aucune Livraison trouvée.'], 404);
+        }
 
         $operations = $this->api->check($this->getUser(), 'app_pharmacy_livraison_confirme', $this->em, $request);
         $detailLivraison = $this->render("pharmacy/livraison_confirme/pages/detailsLivraison.html.twig", [

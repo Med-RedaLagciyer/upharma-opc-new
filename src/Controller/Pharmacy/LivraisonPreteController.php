@@ -155,6 +155,11 @@ class LivraisonPreteController extends AbstractController
             return new JsonResponse(['error' => 'Aucun Livraison.'], 404);
         }
 
+        if ($livraison->getStatus()->getId() != 4) {
+            return new JsonResponse(['error' => 'Aucune Livraison trouvée.'], 404);
+        }
+
+
         $livraisonParDemande = $this->em->getRepository(LivraisonStockCab::class)->findPositionByTheSameDemande($livraison);
 
 
