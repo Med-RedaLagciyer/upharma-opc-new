@@ -27,6 +27,9 @@ class ListPosition
     #[ORM\OneToMany(targetEntity: LivraisonStockCab::class, mappedBy: 'position')]
     private Collection $livraisonStockCabs;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $vip = null;
+
     public function __construct()
     {
         $this->livraisonStockCabs = new ArrayCollection();
@@ -87,6 +90,18 @@ class ListPosition
                 $livraisonStockCab->setPosition(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isVip(): ?bool
+    {
+        return $this->vip;
+    }
+
+    public function setVip(?bool $vip): static
+    {
+        $this->vip = $vip;
 
         return $this;
     }

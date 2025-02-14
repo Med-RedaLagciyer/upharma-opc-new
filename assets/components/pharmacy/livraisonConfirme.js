@@ -236,7 +236,7 @@ $(document).ready(function () {
     })
 
 
-    const preterLivraison = async (id_livraison) => {
+    const preterLivraison = async (id_livraison, vip) => {
         try {
             window.notyf.open({
                 type: "info",
@@ -246,6 +246,7 @@ $(document).ready(function () {
             const request = await axios.post(
                 Routing.generate('app_pharmacy_livraison_confirme_preter',{
                     id_livraison: id_livraison,
+                    vip: vip,
                 })
             );
             const response = await request.data;
@@ -273,13 +274,14 @@ $(document).ready(function () {
     $('body').on('click', '.ModalPreterLiv', async function (e) {
         e.preventDefault();
         let id_livraison = $(this).attr('data-id');
-        await preterLivraison(id_livraison);
+        let vip = $('input[name="vip"]').is(':checked');
+        await preterLivraison(id_livraison, vip);
     })
 
     $('body').on('click', '.PreteLiv', async function (e) {
         e.preventDefault();
         let id_livraison = $(this).attr('data-id');
-        await preterLivraison(id_livraison);
+        await preterLivraison(id_livraison, FALSE);
     })
 
     $('body').on('click', '.ModalFutureLiv', async function (e) {
@@ -299,6 +301,7 @@ $(document).ready(function () {
 
         let date = $('#future_modal #date').val();
         let livraison_id = $('#future_modal #date').attr("data-livraison");
+        let vip = $('input[name="vip"]').is(':checked');
 
         try {
             window.notyf.open({
@@ -309,6 +312,7 @@ $(document).ready(function () {
             const request = await axios.post(
                 Routing.generate('app_pharmacy_livraison_confirme_future',{
                     livraison: livraison_id,
+                    vip: vip,
                     date: date,
                 })
             );

@@ -149,6 +149,9 @@ class LivraisonConfirmeController extends AbstractController
     public function app_pharmacy_livraison_confirme_preter(Request $request): Response
     {
         $idLivraison = $request->get('id_livraison');
+        $vip = ($request->get('vip')=== "true") ? 1 : 0;
+
+        // dd($vip);
 
         $livraison = $this->em->getRepository(LivraisonStockCab::class)->find($idLivraison);
 
@@ -162,7 +165,7 @@ class LivraisonConfirmeController extends AbstractController
         if($livraisonParDemande){
             $LivraisonPosition =$livraisonParDemande[0]->getPosition() ;
         }else{
-            $position = $this->em->getRepository(ListPosition::class)->findOneBy(["isReserved" => false]);
+            $position = $this->em->getRepository(ListPosition::class)->findOneBy(["isReserved" => false, "vip" => $vip]);
             if(!$position){
                 return new JsonResponse(['error' => 'Tous les postitions sont occupées.'], 404);
             }
@@ -187,6 +190,8 @@ class LivraisonConfirmeController extends AbstractController
         // dd($request);
         $idLivraison = $request->get('livraison');
         $dateFuture = $request->get('date');
+        $vip = ($request->get('vip')=== "true") ? 1 : 0;
+        // dd($request->get('vip'));
 
         $livraison = $this->em->getRepository(LivraisonStockCab::class)->find($idLivraison);
 
@@ -200,7 +205,7 @@ class LivraisonConfirmeController extends AbstractController
         if($livraisonParDemande){
             $LivraisonPosition =$livraisonParDemande[0]->getPosition() ;
         }else{
-            $position = $this->em->getRepository(ListPosition::class)->findOneBy(["isReserved" => false]);
+            $position = $this->em->getRepository(ListPosition::class)->findOneBy(["isReserved" => false, "vip" => $vip]);
             if(!$position){
                 return new JsonResponse(['error' => 'Tous les postitions sont occupées.'], 404);
             }

@@ -110,29 +110,43 @@
     <footer class="position-absolute bottom-0 mb-5">
         <div class="container-xl">
             <div class="row" style="justify-content: end;">
+                {% set showFutureCommand = operations|filter(o => o.id == 34)|length > 0 %}
+                {% set showPreterLiv = operations|filter(o => o.id == 13)|length > 0 %}
+
+
+                {% if showFutureCommand or showPreterLiv %}
+                    <div class="col-md-2 d-flex align-items-center" style="justify-content: end;">
+                        <label for="vip-checkbox" class="ms-2">VIP ?</label>&nbsp;
+                        <input style="width: 25px; height: 25px;" type="checkbox" id="vip-checkbox" name="vip" class="form-check-input">
+                    </div>
+                {% endif %}
+
                 <div class="col-md-3">
-                    {% if operations|filter(o => o.id == 34)|length > 0 %}
-                        <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-warning w-100 ModalFutureLiv">
+                    {% if showFutureCommand %}
+                        <a href="#" data-src="modal" data-id="{{ livraison.id }}" class="btn btn-warning w-100 ModalFutureLiv">
                             <i class="fa-solid fa-hourglass-half"></i>&nbsp;
                             Future Commande
                         </a>
                     {% endif %}
                 </div>
+
                 <div class="col-md-4">
-                    {% if operations|filter(o => o.id == 13)|length > 0 %}
-                        <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 ModalPreterLiv">
+                    {% if showPreterLiv %}
+                        <a href="#" data-src="modal" data-id="{{ livraison.id }}" class="btn btn-primary w-100 ModalPreterLiv">
                             <i class="fa fa-box-open"></i>&nbsp;
                             Prêt pour enlèvement
                         </a>
                     {% endif %}
                 </div>
+
                 {% if operations|filter(o => o.id == 36)|length > 0 %}
                     <div class="col-md-1 float-right">
-                        <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 observation">
+                        <a href="#" data-src="modal" data-id="{{ livraison.id }}" class="btn btn-primary w-100 observation">
                             <i class="fa fa-solid fa-edit"></i>&nbsp;
                         </a>
                     </div>
                 {% endif %}
+
             </div>
         </div>
     </footer>
