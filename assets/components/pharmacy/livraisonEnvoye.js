@@ -259,20 +259,6 @@ $(document).ready(function () {
 
             table.ajax.reload();
 
-            // if(window.globalActions.some(action => action.idOp === 13)){
-            //     const button = $('body .ModalConfirmerLiv');
-            //     const etatContainer = $('body .etatContainer');
-            //     if (button) {
-            //         button.removeClass("ModalConfirmerLiv");
-            //         button.removeClass("btn-primary");
-            //         button.addClass("ModalPreteLiv");
-            //         button.addClass("btn-secondary");
-            //         button.html(`<i class="fa fa-box-open"></i>&nbsp; Prêt pour enlèvement`);
-            //         etatContainer.html(``);
-            //     }
-            // }else{
-            //     $('#detailsModal').modal("hide")
-            // }
 
             const hasAction13 = window.globalActions.some(action => action.idOp === 13);
             const hasAction14 = window.globalActions.some(action => action.idOp === 14);
@@ -293,6 +279,15 @@ $(document).ready(function () {
                     <button class="btn btn-warning w-80 ModalFutureLiv" data-id="${id_livraison}" style="float: right;">
                         <i class="fa-solid fa-hourglass-half"></i>&nbsp;Future Commande
                     </button>
+                `);
+            }
+
+            if (hasAction13 || hasAction14) {
+                etatContainer.append(`
+                    <div class="col-md-3 d-flex align-items-center" style="justify-content: end;margin: 5px;float: right;margin-right: 10px;">
+                        <label for="vip-checkbox" class="ms-2">VIP ?</label>&nbsp;
+                        <input style="width: 25px; height: 25px;" type="checkbox" id="vip-checkbox" name="vip" class="form-check-input">
+                    </div>
                 `);
             }
 
@@ -323,6 +318,7 @@ $(document).ready(function () {
 
         let date = $('#future_modal #date').val();
         let livraison_id = $('#future_modal #date').attr("data-livraison");
+        let vip = $('input[name="vip"]').is(':checked');
 
         try {
             window.notyf.open({
@@ -334,6 +330,7 @@ $(document).ready(function () {
                 Routing.generate('app_pharmacy_livraison_confirme_future',{
                     livraison: livraison_id,
                     date: date,
+                    vip: vip,
                 })
             );
             const response = await request.data;
@@ -423,6 +420,7 @@ $(document).ready(function () {
     $('body').on('click', '.ModalPreteLiv', async function (e) {
         e.preventDefault();
         let id_livraison = $(this).attr('data-id');
+        let vip = $('input[name="vip"]').is(':checked');
         try {
             window.notyf.open({
                 type: "info",
@@ -432,6 +430,7 @@ $(document).ready(function () {
             const request = await axios.post(
                 Routing.generate('app_pharmacy_livraison_confirme_preter',{
                     id_livraison: id_livraison,
+                    vip: vip,
                 })
             );
             const response = await request.data;
