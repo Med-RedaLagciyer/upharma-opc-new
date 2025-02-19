@@ -93,6 +93,7 @@ $(document).ready(function () {
             { name: "demandeCab.patient", data: "patient" },
             { name: "demandeCab.dossierPatient", data: "dossierPatient" },
             { name: "status.designation", data: "statut_liv" },
+            { name: "position.position", data: "position" },
             { name: 'actions', date: null, orderable: false, searchable: false, render: function (data,type, full) {
                 var actionsHtml = `<div class="dropdown" style="">
                             <svg class="icon" fill="black" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

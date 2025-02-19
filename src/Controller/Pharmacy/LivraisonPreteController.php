@@ -77,11 +77,12 @@ class LivraisonPreteController extends AbstractController
         }
 
         $queryBuilder = $this->em->createQueryBuilder()
-            ->select('livCab.id ,livCab.code as code_liv_cab, livCab.date as date_liv, demandeCab.code as code_dem_cab, demandeCab.date as date_dem, demandeCab.patient, demandeCab.dossierPatient, status.designation as statut_liv')
+            ->select('livCab.id ,livCab.code as code_liv_cab, livCab.date as date_liv, demandeCab.code as code_dem_cab, demandeCab.date as date_dem, demandeCab.patient, demandeCab.dossierPatient, status.designation as statut_liv, position.position')
             ->from(LivraisonStockCab::class, 'livCab')
             ->innerJoin('livCab.demande', 'demandeCab')
             ->innerJoin('demandeCab.client', 'client')
             ->innerJoin('livCab.status', 'status')
+            ->leftJoin('livCab.position', 'position')
             ->where('demandeCab.active = 1')
             ->andWhere('livCab.active = 1')
             ->andWhere('status.id = 4')
