@@ -138,6 +138,8 @@ class FixMissingController extends AbstractController
                     // dd($result);
                     $demandeCabExist = $this->em->getRepository(DemandeStockCab::class)->findOneBy(["code" => $result["ID_Commande"]]);
                     if($demandeCabExist){
+                        $missing->setTraite(1);
+                        $this->em->flush();
                         continue;
                     }
 
@@ -222,6 +224,8 @@ class FixMissingController extends AbstractController
                     $result = $this->accessDatabaseService->query($sql)[0];
                     $Exist = $this->em->getRepository(DemandeStockDet::class)->findOneBy(["idAccess" => $result["Auto"]]);
                     if($Exist){
+                        $missing->setTraite(1);
+                        $this->em->flush();
                         continue;
                     }
                     // dd($result);
@@ -286,6 +290,8 @@ class FixMissingController extends AbstractController
                     // dd($result);
                     $Exist = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["idAccess" => $result["Auto"]]);
                     if($Exist){
+                        $missing->setTraite(1);
+                        $this->em->flush();
                         continue;
                     }
 
@@ -347,6 +353,8 @@ class FixMissingController extends AbstractController
                     // dd($result);
                     $Exist = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["idAccess" => $result["Auto"]]);
                     if($Exist){
+                        $missing->setTraite(1);
+                        $this->em->flush();
                         continue;
                     }
 
@@ -414,6 +422,8 @@ class FixMissingController extends AbstractController
                     $result = $this->accessDatabaseService->query($sql)[0];
                     $Exist = $this->em->getRepository(LivraisonStockLot::class)->findOneBy(["idAccess" => $result["Auto"]]);
                     if($Exist){
+                        $missing->setTraite(1);
+                        $this->em->flush();
                         continue;
                     }
                     // dd($result);
