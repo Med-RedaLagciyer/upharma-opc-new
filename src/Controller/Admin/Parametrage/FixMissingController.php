@@ -220,6 +220,10 @@ class FixMissingController extends AbstractController
                 foreach ($missings as $missing) {
                     $sql = "SELECT * FROM pVCommande_LG WHERE ". $missing->getIdentifiant()." = " . $missing->getValue() . ";";
                     $result = $this->accessDatabaseService->query($sql)[0];
+                    $Exist = $this->em->getRepository(DemandeStockDet::class)->findOneBy(["idAccess" => $result["Auto"]]);
+                    if($Exist){
+                        continue;
+                    }
                     // dd($result);
                     $demandeCab = $this->em->getRepository(DemandeStockCab::class)->findOneBy(["code" => $result["ID_Commande"]]);
                     if(!$demandeCab){
@@ -280,6 +284,10 @@ class FixMissingController extends AbstractController
                     $sql = "SELECT * FROM pVLivraison WHERE ". $missing->getIdentifiant()." = " . $missing->getValue() . ";";
                     $result = $this->accessDatabaseService->query($sql)[0];
                     // dd($result);
+                    $Exist = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["idAccess" => $result["Auto"]]);
+                    if($Exist){
+                        continue;
+                    }
 
                     $demandeCab = $this->em->getRepository(DemandeStockCab::class)->findOneBy(["code" => $result["ID_Commande"]]);
                     if(!$demandeCab){
@@ -328,6 +336,7 @@ class FixMissingController extends AbstractController
         $insertedCount = 0;
 
         $missings = $this->em->getRepository(InterfacageMissing::class)->findBy(["tableName" => "pVLivraison_LG", "traite" => 0]);
+
         // dd($results);
         try {
             if($missings){
@@ -336,6 +345,10 @@ class FixMissingController extends AbstractController
                     $sql = "SELECT * FROM pVLivraison_LG WHERE ". $missing->getIdentifiant()." = " . $missing->getValue() . ";";
                     $result = $this->accessDatabaseService->query($sql)[0];
                     // dd($result);
+                    $Exist = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["idAccess" => $result["Auto"]]);
+                    if($Exist){
+                        continue;
+                    }
 
                     $livraisonCab = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result["ID_Livraison"]]);
 
@@ -399,6 +412,10 @@ class FixMissingController extends AbstractController
 
                     $sql = "SELECT * FROM pVLivraison_LT WHERE ". $missing->getIdentifiant()." = " . $missing->getValue() . ";";
                     $result = $this->accessDatabaseService->query($sql)[0];
+                    $Exist = $this->em->getRepository(LivraisonStockLot::class)->findOneBy(["idAccess" => $result["Auto"]]);
+                    if($Exist){
+                        continue;
+                    }
                     // dd($result);
 
                     $livraisonCab = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result["ID_Livraison"]]);
