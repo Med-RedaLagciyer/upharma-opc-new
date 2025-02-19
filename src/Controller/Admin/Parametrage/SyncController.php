@@ -87,7 +87,9 @@ class SyncController extends AbstractController
                     $article = new UArticle();
                     $article->setId($result["ID_Article"]);
                     $article->setCode($result["ID_Article"]);
-                    $article->setTitre($result["Article"]);
+
+                    $titre =  mb_convert_encoding($result['Article'], 'UTF-8', 'Windows-1252');
+                    $article->setTitre($titre);
                     $article->setStockMin($result["Stock_Min"]);
                     $article->setStockMax($result["Stock_Max"]);
                     $article->setCodeBarre($result["CodeBarre"]);
@@ -376,8 +378,7 @@ WHERE lg.Auto > ".$lastDemandeDetId."
 
                     $livraisonCab = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result["ID_Livraison"]]);
 
-                    $demandeDet = $this->em->getRepository(DemandeStockDet::class)->findOneBy(["demandeCab" => $livraisonCab->getDemande(), "lignCd" => $result['Ligne_CD']]);
-
+                    
                     // dd($demandeDet, $result['Ligne_CD'], $livraisonCab->getDemande());
                     if(!$livraisonCab){
                         // Save the missing demandeCab to sync it later
@@ -386,7 +387,8 @@ WHERE lg.Auto > ".$lastDemandeDetId."
                         $this->saveInterfacageMissing("pVLivraison_LG", "Auto", $result["Auto"]);
                         continue;
                     }
-
+                    
+                    $demandeDet = $this->em->getRepository(DemandeStockDet::class)->findOneBy(["demandeCab" => $livraisonCab->getDemande(), "lignCd" => $result['Ligne_CD']]);
                     $article =$this->em->getRepository(UArticle::class)->find($result["ID_Article"]);
                     if(!$article){
                         // Save the missing article to sync it later
@@ -449,10 +451,9 @@ WHERE lg.Auto > ".$lastDemandeDetId."
 
                     $livraisonCab = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result["ID_Livraison"]]);
 
-                    $livraisonDet = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["livraison" => $livraisonCab, "lignBl" => $result['Ligne_BL']]);
-
+                    
                     // dd($livraisonDet);
-
+                    
                     if(!$livraisonCab){
                         // Save the missing demandeCab to sync it later
                         $this->saveInterfacageMissing("pVLivraison", "ID_Livraison", $result["ID_Livraison"]);
@@ -460,6 +461,7 @@ WHERE lg.Auto > ".$lastDemandeDetId."
                         $this->saveInterfacageMissing("pVLivraison_LT", "Auto", $result["Auto"]);
                         continue;
                     }
+                    $livraisonDet = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["livraison" => $livraisonCab, "lignBl" => $result['Ligne_BL']]);
 
                     // $livraisonDet = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["code" => $result["ID_Livraison"]]);
 

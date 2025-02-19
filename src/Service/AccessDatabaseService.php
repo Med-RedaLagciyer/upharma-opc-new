@@ -11,9 +11,11 @@ class AccessDatabaseService
 
     public function __construct(string $dsn = null, string $username = '', string $password = '')
     {
-        $this->dsn = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=C:\\Users\\DEV\\Desktop\\access\\AFRIC_MED_DB.accdb;';
-        // $this->dsn = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=\\\172.16.0.15\\afric_med\\AFRIC_MED_DB.accdb;charset=UTF-8;Uid=hcz\DEV;Pwd=123;';
-        // $this->username = 'dev  ';
+        // $this->dsn = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=C:\\Users\\DEV\\Desktop\\access\\Requette.accdb;';
+        $this->dsn = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=\\\172.16.0.15\\afric_med\\AFRIC_MED_DB.accdb;charset=UTF-8;Uid=hcz\dev;Pwd=123;';
+        // $this->dsn = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=\\\172.16.0.37\\test\\AFRIC_MED_DB.accdb;charset=UTF-8;Uid=COSWIN;Pwd=COSWIN8;';
+        // $this->dsn = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=\\\172.16.0.15\\afric_med\\AFRIC_MED_DB.accdb;charset=UTF-8;Uid=dev1;Pwd=123;';
+        // $this->username = 'dev1';
         // $this->password = '123';
 
         if (!$this->dsn) {

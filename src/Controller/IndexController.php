@@ -47,6 +47,7 @@ class IndexController extends AbstractController
         if (in_array('ROLE_SUPERADMIN', $this->getUser()->getRoles())) {
             $sousModules = $this->em->getRepository(UsSousModule::class)->findBy([], ['ordre' => 'ASC']);
         } else {
+            // dd("maintenance!");
             $sousModules = $this->em->getRepository(UsSousModule::class)->findByUserOperations($this->getUser());
         }
         // dd($sousModules[0]->getOperations());
