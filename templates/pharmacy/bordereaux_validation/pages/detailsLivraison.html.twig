@@ -1,0 +1,131 @@
+<div class="row row-cards">
+	<div class="hr-text" style="margin: 20px 0 6px 0 !important;">Informations Générales</div>
+	<div class="col-md-4">
+		<label class="form-label">Code Demande: <div class="d-inline form-control-plaintext text-secondary">{{livraison.demande.code}}</div></label>
+	</div>
+
+    <div class="col-md-4">
+		<label class="form-label">Demandeur: <div class="d-inline form-control-plaintext text-secondary">{{livraison.demande.antenneDemandeur ? livraison.demande.antenneDemandeur.designation : "-"}}</div></label>
+	</div>
+
+	<div class="col-md-4">
+		<label class="form-label">Observation: <div class="d-inline form-control-plaintext text-secondary">{{livraison.demande.observation}}</div></label>
+	</div>
+
+	<div class="col-md-4">
+		<label class="form-label">Code Livraison: <div class="d-inline form-control-plaintext text-secondary">{{livraison.code}}</div></label>
+	</div>
+
+	<div class="col-md-4">
+		<label class="form-label">Récépteur: <div class="d-inline form-control-plaintext text-secondary">{{livraison.demande.antenne ? livraison.demande.antenne.designation : "-"}}</div></label>
+	</div>
+
+    <div class="hr-text" style="margin: 20px 0 6px 0 !important;">Impressions Associées</div>
+    <div class="row mt-2">
+        <div class="col-md-4">
+            <a href="#" id="pdfDemande" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Demande : {{livraison.demande.code}}</a>
+        </div>
+        <div class="col-md-4">
+            <a href="#" id="pdfLivraison" data-id="{{livraison.id}}" class="btn btn-secondary w-100"><i class="fas fa-file-pdf"></i>&nbsp;Livraison : {{livraison.code}}</a>
+        </div>
+    </div>
+
+    <div class="hr-text" style="margin: 20px 0 6px 0 !important;">Détails Demande</div>
+
+    <table id="list_details_demande" class="table custom-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th width="3%">#</th>
+                <th width="5%">Article</th>
+                <th width="10%">Qte demandé</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set ord = 0 %}
+        {% for detail in livraison.demande.demandeStockDets  %}
+            {% set ord = ord + 1 %}
+            <tr>
+                <td width="3%">{{ord}}</td>
+                <td width="50%"><span class="truncated-text" title="{{detail.article.titre}}">{{detail.article.titre|length > 100 ? detail.article.titre|slice(0, 100) ~ '...' : detail.article.titre}}</span></td>
+                <td width="5%">{{detail.qte}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="hr-text" style="margin: 20px 0 6px 0 !important;">Détails Livraison</div>
+
+    <table id="list_details" class="table custom-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th width="3%">#</th>
+                <th width="5%">Article</th>
+                <th width="10%">Qte demandé</th>
+                <th width="5%">Qte livé</th>
+                <th width="10%">Qte RS</th>
+                <th width="10%">Retour</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set ord = 0 %}
+        {% set qteDemande = 0 %}
+        {% for detail in livraison.livraisonStockDets  %}
+            {% set ord = ord + 1 %}
+            <tr>
+                <td width="3%">{{ord}}</td>
+                <td width="50%"><span class="truncated-text" title="{{detail.article.titre}}">{{detail.article.titre|length > 100 ? detail.article.titre|slice(0, 100) ~ '...' : detail.article.titre}}</span></td>
+                {% for demandeDet in livraison.demande.demandeStockDets %}
+                    {% if demandeDet.article.id == detail.article.id %}
+                        {% set qteDemande = demandeDet.qte %}
+                    {% endif %}
+                {% endfor %}
+                <td width="5%">{{qteDemande}}</td>
+                <td width="5%">{{detail.quantity}}</td>
+                <td width="5%">{{qteDemande - detail.quantity}}</td>
+                <td width="5%">Non</td>
+            </tr>
+        {% endfor %}
+        {% if livraison.livraisonStockCabs |length > 0 %}
+            {% for retour in livraison.livraisonStockCabs  %}
+                {% for retourDet in retour.livraisonStockDets  %}
+                    {% set ord = ord + 1 %}
+                    <tr style="background-color: #ffe6e9 !important;">
+                        <td width="3%">{{ord}}</td>
+                        <td width="50%"><span class="truncated-text" title="{{retourDet.article.titre}}">{{retourDet.article.titre|length > 100 ? retourDet.article.titre|slice(0, 100) ~ '...' : retourDet.article.titre}}</span></td>
+                        {% for demandeDet in livraison.demande.demandeStockDets %}
+                            {% if demandeDet.article.id == retourDet.article.id %}
+                                {% set qteDemande = demandeDet.qte %}
+                            {% endif %}
+                        {% endfor %}
+                        <td width="5%">{{qteDemande}}</td>
+                        <td width="5%">{{retourDet.quantity}}</td>
+                        <td width="5%">{{qteDemande - retourDet.quantity}}</td>
+                        <td width="5%">Oui</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+    <footer class="position-absolute bottom-0 mb-5">
+        <div class="container-xl" style="margin: 0 !important">
+            <div class="row" style="justify-content: end;">
+                <div class="col-md-3">
+                    {% if livraison.isValide != 1 and operations|filter(o => o.id == 23)|length > 0 %}
+                        <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-teal w-100 ModalValiderLiv">
+                            <i class="fa fa-solid fa-check"></i>&nbsp;
+                            Valider
+                        </a>
+                    {% endif %}
+                </div>
+                {% if operations|filter(o => o.id == 25)|length > 0 %}
+                    <div class="col-md-1 float-right">
+                        <a href="#" data-src="modal" data-id="{{livraison.id}}" class="btn btn-primary w-100 observation">
+                            <i class="fa fa-solid fa-edit"></i>&nbsp;
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </footer>
+</div>

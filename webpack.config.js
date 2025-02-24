@@ -32,6 +32,7 @@ Encore.addPlugin(new FosRouting())
   .addEntry("pharmacy_liv_prete", "./assets/components/pharmacy/livraisonPrete.js")
   .addEntry("pharmacy_liv_livre", "./assets/components/pharmacy/livraisonLivre.js")
   .addEntry("pharmacy_liv_future", "./assets/components/pharmacy/livraisonFuture.js")
+  .addEntry("pharmacy_brd", "./assets/components/pharmacy/borderaux.js")
 
   // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
   .splitEntryChunks()

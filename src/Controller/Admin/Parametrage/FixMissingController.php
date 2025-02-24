@@ -134,11 +134,7 @@ class FixMissingController extends AbstractController
             if($missings){
                 foreach ($missings as $missing) {
                     $sql = "SELECT * FROM pVCommande WHERE ". $missing->getIdentifiant()." = " . $missing->getValue() . ";";
-                    $result = $this->accessDatabaseService->query($sql);
-                    if(!$result){
-                        continue;
-                    }
-                    $result = $result[0];
+                    $result = $this->accessDatabaseService->query($sql)[0];
                     // dd($result);
                     $demandeCabExist = $this->em->getRepository(DemandeStockCab::class)->findOneBy(["code" => $result["ID_Commande"]]);
                     if($demandeCabExist){
@@ -225,11 +221,7 @@ class FixMissingController extends AbstractController
             if($missings){
                 foreach ($missings as $missing) {
                     $sql = "SELECT * FROM pVCommande_LG WHERE ". $missing->getIdentifiant()." = " . $missing->getValue() . ";";
-                    $result = $this->accessDatabaseService->query($sql);
-                    if(!$result){
-                        continue;
-                    }
-                    $result = $result[0];
+                    $result = $this->accessDatabaseService->query($sql)[0];
                     $Exist = $this->em->getRepository(DemandeStockDet::class)->findOneBy(["idAccess" => $result["Auto"]]);
                     if($Exist){
                         $missing->setTraite(1);
@@ -241,18 +233,18 @@ class FixMissingController extends AbstractController
                     if(!$demandeCab){
                         // dd($result["ID_Commande"]);
                         // Save the missing demandeCab to sync it later
-                        $this->saveInterfacageMissing("pVCommande", "ID_Commande", $result["ID_Commande"]);
-                        // save the current table as well
-                        $this->saveInterfacageMissing("pVCommande_LG", "Auto", $result["Auto"]);
+                        // $this->saveInterfacageMissing("pVCommande", "ID_Commande", $result["ID_Commande"]);
+                        // // save the current table as well
+                        // $this->saveInterfacageMissing("pVCommande_LG", "Auto", $result["Auto"]);
                         continue;
                     }
 
                     $article = $this->em->getRepository(UArticle::class)->find($result["ID_Article"]);
                     if(!$article){
                         // Save the missing article to sync it later
-                        $this->saveInterfacageMissing("pArticles", "ID_Article", $result["ID_Article"]);
-                        // save the current table as well
-                        $this->saveInterfacageMissing("pVCommande_LG", "Auto", $result["Auto"]);
+                        // $this->saveInterfacageMissing("pArticles", "ID_Article", $result["ID_Article"]);
+                        // // save the current table as well
+                        // $this->saveInterfacageMissing("pVCommande_LG", "Auto", $result["Auto"]);
                         continue;
                     }
 
@@ -289,19 +281,16 @@ class FixMissingController extends AbstractController
         $insertedCount = 0;
 
         $missings = $this->em->getRepository(InterfacageMissing::class)->findBy(["tableName" => "pVLivraison", "traite" => 0]);
-        // dd($results);
+        // dd($missings);
         try {
             if($missings){
                 foreach ($missings as $missing) {
                     $sql = "SELECT * FROM pVLivraison WHERE ". $missing->getIdentifiant()." = " . $missing->getValue() . ";";
-                    $result = $this->accessDatabaseService->query($sql);
-                    if(!$result){
-                        continue;
-                    }
-                    $result = $result[0];
+                    $result = $this->accessDatabaseService->query($sql)[0];
                     // dd($result);
                     $Exist = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["idAccess" => $result["Auto"]]);
                     if($Exist){
+                        // dd($Exist);
                         $missing->setTraite(1);
                         $this->em->flush();
                         continue;
@@ -309,10 +298,11 @@ class FixMissingController extends AbstractController
 
                     $demandeCab = $this->em->getRepository(DemandeStockCab::class)->findOneBy(["code" => $result["ID_Commande"]]);
                     if(!$demandeCab){
-                        // Save the missing demandeCab to sync it later
-                        $this->saveInterfacageMissing("pVCommande", "ID_Commande", $result["ID_Commande"]);
-                        // save the current table as well
-                        $this->saveInterfacageMissing("pVLivraison", "Auto", $result["Auto"]);
+                        dd("hi",  $result["ID_Commande"]);
+                        // // Save the missing demandeCab to sync it later
+                        // $this->saveInterfacageMissing("pVCommande", "ID_Commande", $result["ID_Commande"]);
+                        // // save the current table as well
+                        // $this->saveInterfacageMissing("pVLivraison", "Auto", $result["Auto"]);
                         continue;
                     }
 
@@ -351,58 +341,59 @@ class FixMissingController extends AbstractController
     #[Route('/api_livraison_det_fix', name: 'api_livraison_det_fix', options: ['expose' => true])]
     public function api_livraison_det_fix()
     {
+        // dd("hi");
         $insertedCount = 0;
 
         $missings = $this->em->getRepository(InterfacageMissing::class)->findBy(["tableName" => "pVLivraison_LG", "traite" => 0]);
 
-        // dd($missings);
+        // dd($results);
         // try {
             if($missings){
                 foreach ($missings as $missing) {
 
                     $sql = "SELECT * FROM pVLivraison_LG WHERE ". $missing->getIdentifiant()." = " . $missing->getValue() . ";";
-                    // dd($sql);
                     $result = $this->accessDatabaseService->query($sql);
+                    // dd($result,$missing->getValue(),$missing->getIdentifiant());
                     if(!$result){
                         continue;
                     }
-                    $result = $result[0];
-                    $Exist = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["idAccess" => $result["Auto"]]);
+                    // dd($result);
+                    $Exist = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["idAccess" => $result[0]["Auto"]]);
                     if($Exist){
                         $missing->setTraite(1);
                         $this->em->flush();
                         continue;
                     }
 
-                    $livraisonCab = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result["ID_Livraison"]]);
+                    $livraisonCab = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result[0]["ID_Livraison"]]);
 
 
                     // dd($demandeDet, $result['Ligne_CD'], $livraisonCab->getDemande());
                     if(!$livraisonCab){
                         // Save the missing demandeCab to sync it later
-                        $this->saveInterfacageMissing("pVLivraison", "ID_Livraison", $result["ID_Livraison"]);
-                        // save the current table as well
-                        $this->saveInterfacageMissing("pVLivraison_LG", "Auto", $result["Auto"]);
+                        // $this->saveInterfacageMissing("pVLivraison", "ID_Livraison", $result["ID_Livraison"]);
+                        // // save the current table as well
+                        // $this->saveInterfacageMissing("pVLivraison_LG", "Auto", $result["Auto"]);
                         continue;
                     }
 
-                    $demandeDet = $this->em->getRepository(DemandeStockDet::class)->findOneBy(["demandeCab" => $livraisonCab->getDemande(), "lignCd" => $result['Ligne_CD']]);
-                    $article =$this->em->getRepository(UArticle::class)->find($result["ID_Article"]);
+                    $demandeDet = $this->em->getRepository(DemandeStockDet::class)->findOneBy(["demandeCab" => $livraisonCab->getDemande(), "lignCd" => $result[0]['Ligne_CD']]);
+                    $article =$this->em->getRepository(UArticle::class)->find($result[0]["ID_Article"]);
                     if(!$article){
                         // Save the missing article to sync it later
-                        $this->saveInterfacageMissing("pArticles", "ID_Article", $result["ID_Article"]);
-                        // save the current table as well
-                        $this->saveInterfacageMissing("pVLivraison_LG", "Auto", $result["Auto"]);
+                        // $this->saveInterfacageMissing("pArticles", "ID_Article", $result["ID_Article"]);
+                        // // save the current table as well
+                        // $this->saveInterfacageMissing("pVLivraison_LG", "Auto", $result["Auto"]);
                         continue;
                     }
 
                     $livraisonDet = new LivraisonStockDet();
-                    $livraisonDet->setIdAccess($result["Auto"]);
+                    $livraisonDet->setIdAccess($result[0]["Auto"]);
                     $livraisonDet->setLivraison($livraisonCab);
                     $livraisonDet->setArticle($article);
-                    $livraisonDet->setQuantity($result['Quantite_BL']);
-                    $livraisonDet->setLignCd($result['Ligne_CD']);
-                    $livraisonDet->setLignBl($result['Ligne_BL']);
+                    $livraisonDet->setQuantity($result[0]['Quantite_BL']);
+                    $livraisonDet->setLignCd($result[0]['Ligne_CD']);
+                    $livraisonDet->setLignBl($result[0]['Ligne_BL']);
                     $livraisonDet->setDemandeDet($demandeDet);
 
                     $this->em->persist($livraisonDet);
@@ -439,8 +430,7 @@ class FixMissingController extends AbstractController
                     if(!$result){
                         continue;
                     }
-                    $result = $result[0];
-                    $Exist = $this->em->getRepository(LivraisonStockLot::class)->findOneBy(["idAccess" => $result["Auto"]]);
+                    $Exist = $this->em->getRepository(LivraisonStockLot::class)->findOneBy(["idAccess" => $result[0]["Auto"]]);
                     if($Exist){
                         $missing->setTraite(1);
                         $this->em->flush();
@@ -448,42 +438,42 @@ class FixMissingController extends AbstractController
                     }
                     // dd($result);
 
-                    $livraisonCab = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result["ID_Livraison"]]);
+                    $livraisonCab = $this->em->getRepository(LivraisonStockCab::class)->findOneBy(["code" => $result[0]["ID_Livraison"]]);
 
 
                     // dd($livraisonDet);
 
                     if(!$livraisonCab){
                         // Save the missing demandeCab to sync it later
-                        $this->saveInterfacageMissing("pVLivraison", "ID_Livraison", $result["ID_Livraison"]);
-                        // save the current table as well
-                        $this->saveInterfacageMissing("pVLivraison_LT", "Auto", $result["Auto"]);
+                        // $this->saveInterfacageMissing("pVLivraison", "ID_Livraison", $result["ID_Livraison"]);
+                        // // save the current table as well
+                        // $this->saveInterfacageMissing("pVLivraison_LT", "Auto", $result["Auto"]);
                         continue;
                     }
-                    $livraisonDet = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["livraison" => $livraisonCab, "lignBl" => $result['Ligne_BL']]);
+                    $livraisonDet = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["livraison" => $livraisonCab, "lignBl" => $result[0]['Ligne_BL']]);
 
                     // $livraisonDet = $this->em->getRepository(LivraisonStockDet::class)->findOneBy(["code" => $result["ID_Livraison"]]);
 
 
                     $livraisonLot = new LivraisonStockLot();
-                    $livraisonLot->setIdAccess($result["Auto"]);
+                    $livraisonLot->setIdAccess($result[0]["Auto"]);
                     $livraisonLot->setLivraisonCab($livraisonCab);
-                    $livraisonLot->setDateSys(new \DateTime($result["Date_Sys"]));
-                    $livraisonLot->setLot($result["Lot"]);
-                    $livraisonLot->setDatePeremption(new \DateTime($result["Date_Expir"]));
-                    $livraisonLot->setQuantite($result['Quantite_LT']);
-                    $livraisonLot->setQuantiteRetour($result['Quantite_RT']);
+                    $livraisonLot->setDateSys(new \DateTime($result[0]["Date_Sys"]));
+                    $livraisonLot->setLot($result[0]["Lot"]);
+                    $livraisonLot->setDatePeremption(new \DateTime($result[0]["Date_Expir"]));
+                    $livraisonLot->setQuantite($result[0]['Quantite_LT']);
+                    $livraisonLot->setQuantiteRetour($result[0]['Quantite_RT']);
 
-                    $naturePrix = $this->em->getRepository(PNaturePrix::class)->find($result['ID_Nature_Prix']);
+                    $naturePrix = $this->em->getRepository(PNaturePrix::class)->find($result[0]['ID_Nature_Prix']);
                     $livraisonLot->setNaturePrix($naturePrix);
 
-                    $livraisonLot->setPrixVenteTtc($result['Prix_Vente']);
-                    $livraisonLot->setPrixAchatHt($result['Prix_Achat']);
-                    $livraisonLot->setMontant($result['Montant']);
-                    $livraisonLot->setTva($result['Taux']);
-                    $livraisonLot->setValeurA($result['ValeurA']);
-                    $livraisonLot->setMerge($result['Marge']);
-                    $livraisonLot->setLignBl($result['Ligne_BL']);
+                    $livraisonLot->setPrixVenteTtc($result[0]['Prix_Vente']);
+                    $livraisonLot->setPrixAchatHt($result[0]['Prix_Achat']);
+                    $livraisonLot->setMontant($result[0]['Montant']);
+                    $livraisonLot->setTva($result[0]['Taux']);
+                    $livraisonLot->setValeurA($result[0]['ValeurA']);
+                    $livraisonLot->setMerge($result[0]['Marge']);
+                    $livraisonLot->setLignBl($result[0]['Ligne_BL']);
                     $livraisonLot->setLivraisonDet($livraisonDet);
 
 

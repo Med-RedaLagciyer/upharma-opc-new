@@ -1,0 +1,95 @@
+{# <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet"> #}
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono" rel="stylesheet">
+
+<style type="text/Css">
+
+    *,body {
+        font-family: 'Courier';
+        font-size: 13px;
+        text-transform: uppercase;
+    }
+
+    .header-title{
+        font-family: "DM Sans", sans-serif;
+        color:#D2D2D4
+    }
+
+    .main-title{
+        font-family: "DM Sans", sans-serif;
+        color:#0C151C
+    }
+
+    .footer p{
+        font-size: 9px;
+        color:#747478
+    }
+</style>
+<br>
+<br>
+<br>
+<table style="width: 100%;table-layout: fixed;" align="center" class="test"cellspacing="0">
+	<tbody>
+		<tr>
+			<td style="width: 60%; text-align: left; vertical-align: middle;">
+				<div style="height: 100%; ">
+					<span style="font-size: 32px; text-transform: uppercase; font-weight: bold; position: absolute;" class="main-title">
+						BORDEREAUX VALIDATION
+					</span>
+				</div>
+			</td>
+			<td style="width: 40%; text-align: right;">
+				<table style="">
+                    <tr>
+                        <td style="width: 100%; font-size: 11px;text-align:start; padding-left: 7px">
+                            <b>CODE&nbsp;&nbsp; :
+                            </b>&nbsp;
+                            {{ bordereaux.code|upper }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100%; font-size: 11px;text-align:start; padding-left: 7px">
+                            <b>DATE&nbsp;&nbsp;&nbsp;:
+                            </b>&nbsp;
+                            {{ bordereaux.created ? bordereaux.created|date("d/m/Y") : "-"}}
+                        </td>
+                    </tr>
+                </table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<br>
+
+<table cellspacing="0" style="width: 100%; text-align: left; font-size: 12px">
+    <tr style="color:black; padding: 5 10px">
+        <td >
+            <h5 style="padding: 5px 10px ; text-transform: uppercase;font-weight: bold;font-size: 15px">Livraisons :</h5>
+        </td>
+    </tr>
+</table>
+<table class="" style="width: 100% ; margin-top:6px" cellspacing="0">
+    <thead>
+        <tr style="background-color: #C9CCD5; color:black; font-size: 6px;">
+            <th style="width: 5%;padding: 1px;font-size: 9px;">#</th>
+            <th style="width: 15%;padding: 1px;font-size: 9px;">CODE DM</th>
+            <th style="width: 10%;padding: 1px;font-size: 9px;">DATE DM</th>
+            <th style="width: 15%;padding: 1px;font-size: 9px;">CODE LV</th>
+            <th style="width: 10%;padding: 1px;font-size: 9px;">DATE LV</th>
+            <th style="width: 45%;padding: 1px;font-size: 9px;">OBS</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key , livraison in bordereaux.livraisonStockCabs %}
+            {% set  key = key + 1  %}
+            <tr>
+                <td style="width: 5%;text-transform:uppercase;padding: 3px;font-size: 9px;text-align: center;">{{key}}</td>
+                <td style="width: 10%;text-transform:uppercase;padding: 3px;font-size: 11px;text-align: center;font-weight:bold;">{{ livraison.demande.code|upper }}</td>
+                <td style="width: 10%;text-transform:uppercase;padding: 3px;font-size: 9px;text-align: center;">{{ livraison.demande.date|date("d/m/Y")}}</td>
+                <td style="width: 10%;text-transform:uppercase;padding: 3px;font-size: 11px;text-align: center;font-weight:bold;">{{ livraison.code|upper }}</td>
+                <td style="width: 10%;text-transform:uppercase;padding: 3px;font-size: 9px;text-align: center;">{{ livraison.date|date("d/m/Y")}}</td>
+                <td style="width: 55%;text-transform:uppercase;padding: 3px;font-size: 11px;text-align: center;font-weight:bold;">{{ bordereaux.observation}}</td>
+        {% endfor %}
+    </tbody>
+</table>
+<br>

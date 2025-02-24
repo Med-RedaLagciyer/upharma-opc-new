@@ -161,6 +161,36 @@ class ExportsController extends AbstractController
         // dd($html);
 
         $mpdf->WriteHTML($html);
-        $mpdf->Output("List Rendez_vous.pdf", "I");
+        $mpdf->Output("LIVRAISON-".$livraison->getCode(), "I");
+    }
+
+    #[Route('/export_pdf_brd', name: 'app_pharmacy_exports_export_pdf_brd', options: ['expose' => true])]
+    public function app_pharmacy_exports_export_pdf_brd(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+
+        $brd_id = $request->get('brd_id');
+        $bordereaux = $this->em->getRepository(BordereauxValidation::class)->find($brd_id);
+
+        $html = $this->render("pharmacy/exports/pdfs/export_pdf_brd.html.twig", [
+            'bordereaux' => $bordereaux,
+        ])->getContent();
+        $mpdf = new Mpdf([
+            'mode' => 'utf-8',
+            'margin_left' => 5,
+            'margin_right' => 5,
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->SetTitle('Livraison');
+        $mpdf->SetHTMLHeader(
+            $this->render("pharmacy/exports/pdfs/header.html.twig")->getContent()
+        );
+        $mpdf->SetHTMLFooter(
+            $this->render("pharmacy/exports/pdfs/footer.html.twig")->getContent()
+        );
+        // dd($html);
+
+        $mpdf->WriteHTML($html);
+        $mpdf->Output("BORDEREAUX-".$bordereaux->getCode(), "I");
     }
 }

@@ -166,6 +166,7 @@ class LivraisonLivreController extends AbstractController
         $brdValidation = new BordereauxValidation();
         $brdValidation->setUserCreated($this->getUser());
         $brdValidation->setCreated(new DateTime('now'));
+        $brdValidation->setObservation($observation);
         $this->em->persist($brdValidation);
 
         $this->em->flush();

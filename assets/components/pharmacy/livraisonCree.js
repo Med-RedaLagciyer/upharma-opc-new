@@ -352,7 +352,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         let observation = $('#observation_modal #observation').val();
-        let livraison_array = $('#observation_modal #observation').attr("data-livraisons");
+        let livraisons = $('#observation_modal #observation').attr("data-livraisons");
 
         try {
             window.notyf.open({
@@ -362,7 +362,7 @@ $(document).ready(function () {
             });
             const request = await axios.post(
                 Routing.generate('app_pharmacy_livraison_cree_observation',{
-                    livraisons: JSON.parse(livraison_array),
+                    livraisons: JSON.parse(livraisons),
                     observation: observation,
                 })
             );
@@ -377,6 +377,7 @@ $(document).ready(function () {
             $('#observation_modal #observation').val("");
             $('#observation_modal #observation').attr("data-livraisons", "");
             $('#observation_modal').modal("hide")
+            livraison_array = []
             table.ajax.reload();
         } catch (error) {
             window.notyf.dismissAll();

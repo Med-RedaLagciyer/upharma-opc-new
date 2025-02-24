@@ -31,6 +31,9 @@ class BordereauxValidation
     #[ORM\OneToMany(targetEntity: LivraisonStockCab::class, mappedBy: 'bordereauxValidation')]
     private Collection $livraisonStockCabs;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $observation = null;
+
     public function __construct()
     {
         $this->livraisonStockCabs = new ArrayCollection();
@@ -103,6 +106,18 @@ class BordereauxValidation
                 $livraisonStockCab->setBordereauxValidation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getObservation(): ?string
+    {
+        return $this->observation;
+    }
+
+    public function setObservation(?string $observation): static
+    {
+        $this->observation = $observation;
 
         return $this;
     }

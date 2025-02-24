@@ -208,6 +208,8 @@ $(document).ready(function () {
     }
 
     const validerLivraison = async (id_livraison, observation) => {
+        console.log(id_livraison);
+        return;
         try {
             window.notyf.open({
                 type: "info",
@@ -279,6 +281,7 @@ $(document).ready(function () {
     $('body').on('click', '.ModalValiderLiv', async function (e) {
         e.preventDefault();
         let livraison = [$(this).attr('data-id')];
+        $('#modal-validation #observation').attr("data-livraisons", "");
         $('#modal-validation #observation').attr("data-livraisons", JSON.stringify(livraison));
         $('#modal-validation').modal("show")
     })
@@ -289,6 +292,8 @@ $(document).ready(function () {
             window.notyf.error("Merci de choisir une livraison.");
             return;
         }
+        console.log(livraison_array);
+        $('#modal-validation #observation').attr("data-livraisons", "");
         $('#modal-validation #observation').attr("data-livraisons", JSON.stringify(livraison_array));
         $('#modal-validation').modal("show")
     })
@@ -316,7 +321,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         let observation = $('#observation_modal #observation').val();
-        let livraison_array = $('#observation_modal #observation').attr("data-livraisons");
+        let livraisons = $('#observation_modal #observation').attr("data-livraisons");
 
         try {
             window.notyf.open({
@@ -326,7 +331,7 @@ $(document).ready(function () {
             });
             const request = await axios.post(
                 Routing.generate('app_pharmacy_livraison_livre_observation',{
-                    livraisons: JSON.parse(livraison_array),
+                    livraisons: JSON.parse(livraisons),
                     observation: observation,
                 })
             );
@@ -341,6 +346,7 @@ $(document).ready(function () {
             $('#observation_modal #observation').val("");
             $('#observation_modal #observation').attr("data-livraisons", "");
             $('#observation_modal').modal("hide")
+            livraison_array = []
             table.ajax.reload();
         } catch (error) {
             window.notyf.dismissAll();
@@ -357,7 +363,10 @@ $(document).ready(function () {
         e.preventDefault();
 
         let observation = $('#modal-validation #observation').val();
-        let livraison_array = $('#modal-validation #observation').attr("data-livraisons");
+        let livraisons = $('#modal-validation #observation').attr("data-livraisons");
+
+        // console.log(livraison_array);
+        // return;
 
         try {
             window.notyf.open({
@@ -367,7 +376,7 @@ $(document).ready(function () {
             });
             const request = await axios.post(
                 Routing.generate('app_pharmacy_livraison_livre_valider',{
-                    livraisons: JSON.parse(livraison_array),
+                    livraisons: JSON.parse(livraisons),
                     observation: observation,
                 })
             );
@@ -382,6 +391,7 @@ $(document).ready(function () {
             $('#modal-validation #observation').val("");
             $('#modal-validation #observation').attr("data-livraisons", "");
             $('#modal-validation').modal("hide")
+            livraison_array = []
             table.ajax.reload();
         } catch (error) {
             window.notyf.dismissAll();
