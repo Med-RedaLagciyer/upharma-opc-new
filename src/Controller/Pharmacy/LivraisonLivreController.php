@@ -172,6 +172,7 @@ class LivraisonLivreController extends AbstractController
         $this->em->flush();
 
         $brdValidation->setCode('BRD-LIV_' . str_pad($brdValidation->getId(), 8, '0', STR_PAD_LEFT));
+        $id_brd = $brdValidation->getId();
         $this->em->flush();
 
         foreach($livraisons as $idLivraison){
@@ -198,7 +199,10 @@ class LivraisonLivreController extends AbstractController
         $this->em->flush();
 
         // dd($idLivraison,$observation);
-        return new JsonResponse("Livraisons validées avec succès.", 200);
+        return new JsonResponse([
+            "message" => "Livraisons validées avec succès.",
+            "bordereaux_id" => $id_brd
+        ], 200);
     }
     #[Route('/observation', name: 'app_pharmacy_livraison_livre_observation', options: ['expose' => true])]
     public function app_pharmacy_livraison_livre_observation(Request $request): Response

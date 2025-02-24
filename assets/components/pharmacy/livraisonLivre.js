@@ -384,7 +384,7 @@ $(document).ready(function () {
             window.notyf.dismissAll();
             window.notyf.open({
                 type: "success",
-                message: response,
+                message: response.message,
                 duration: 3000,
             });
 
@@ -393,6 +393,15 @@ $(document).ready(function () {
             $('#modal-validation').modal("hide")
             livraison_array = []
             table.ajax.reload();
+
+            // print pdf brd
+            brd_id = response.bordereaux_id;
+
+            let url = Routing.generate('app_pharmacy_exports_export_pdf_brd', {
+                brd_id: brd_id
+            });
+
+            window.open(url, '_blank');
         } catch (error) {
             window.notyf.dismissAll();
             console.log(error);
