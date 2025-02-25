@@ -9,6 +9,7 @@ use App\Entity\LivraisonStatus;
 use App\Controller\ApiController;
 use App\Entity\LivraisonStockCab;
 use App\Entity\BordereauxValidation;
+use App\Entity\ListPosition;
 use App\Entity\LivraisonObservation;
 use App\Entity\LivraisonStockDet;
 use Picqer\Barcode\BarcodeGeneratorHTML;
@@ -21,6 +22,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 #[Route('/exports')]
 class ExportsController extends AbstractController
@@ -31,6 +35,78 @@ class ExportsController extends AbstractController
     {
         $this->em = $doctrine->getManager();
         $this->api = $api;
+    }
+
+    #[Route('/export_excel_positions', name: 'app_pharmacy_exports_export_excel_positions', options: ['expose' => true])]
+    public function app_pharmacy_exports_export_excel_positions(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+
+        $positions = $this->em->getRepository(ListPosition::class)->findAll();
+        // dd($livraisons);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('POSITIONS');
+        $sheet->setCellValue('A1', 'ORD');
+        $sheet->setCellValue('B1', 'POSITION');
+        $sheet->setCellValue('C1', 'RESERVEE');
+        $sheet->setCellValue('D1', 'VIP');
+        $sheet->setCellValue('E1', 'NBR LIVRAISONS');
+        $sheet->setCellValue('F1', 'CODE DM');
+        $sheet->setCellValue('G1', 'CODE LV');
+
+        $i = 2;
+
+        foreach ($positions as $position) {
+            // Check if the position has livraisons
+            $livraisons = $position->getLivraisonStockCabs();
+            $nbrLivraisons = count($livraisons);
+
+            // If there are no livraisons, display a placeholder
+            if ($nbrLivraisons === 0) {
+                $sheet->setCellValue('A' . $i, $position->getId());
+                $sheet->setCellValue('B' . $i, $position->getPosition());
+                $sheet->setCellValue('C' . $i, $position->isReserved() ? "OUI" : "NON");
+                $sheet->setCellValue('D' . $i, $position->isVip() ? "OUI" : "NON");
+                $sheet->setCellValue('E' . $i, 0);
+                $sheet->setCellValue('F' . $i, 'NULL'); // Placeholder for CODE DM
+                $sheet->setCellValue('G' . $i, 'NULL'); // Placeholder for CODE LV
+                $i++;
+            } else {
+                // If there are livraisons, display their details
+                $sheet->setCellValue('A' . $i, $position->getId());
+                $sheet->setCellValue('B' . $i, $position->getPosition());
+                $sheet->setCellValue('C' . $i, $position->isReserved() ? "OUI" : "NON");
+                $sheet->setCellValue('D' . $i, $position->isVip() ? "OUI" : "NON");
+                $sheet->setCellValue('E' . $i, $nbrLivraisons);
+
+                // Merge cells for POSITION, RESERVEE, and VIP columns
+                if ($nbrLivraisons > 1) {
+                    $sheet->mergeCells("A{$i}:A" . ($i + $nbrLivraisons - 1));
+                    $sheet->mergeCells("B{$i}:B" . ($i + $nbrLivraisons - 1));
+                    $sheet->mergeCells("C{$i}:C" . ($i + $nbrLivraisons - 1));
+                    $sheet->mergeCells("D{$i}:D" . ($i + $nbrLivraisons - 1));
+                    $sheet->mergeCells("E{$i}:E" . ($i + $nbrLivraisons - 1));
+                }
+
+                foreach ($livraisons as $livraison) {
+                    $sheet->setCellValue('F' . $i, $livraison->getDemande()->getCode());
+                    $sheet->setCellValue('G' . $i, $livraison->getCode());
+                    $i++; // Move to the next row for the next livraison
+                }
+            }
+            $lastRow = $i - 1;
+            $sheet->getStyle("A{$lastRow}:G{$lastRow}")->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+        }
+
+        // die('die');
+        $writer = new Xlsx($spreadsheet);
+        $fileName = "ETAT POSITIONS ". (new DateTime())->format('d-m-Y') .".xlsx";
+        $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($temp_file);
+        return $this->file($temp_file, $fileName, ResponseHeaderBag::DISPOSITION_INLINE);
     }
 
     #[Route('/export_excel_livraison', name: 'app_pharmacy_exports_export_excel_livraison', options: ['expose' => true])]
