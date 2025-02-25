@@ -170,7 +170,7 @@ class LivraisonPreteController extends AbstractController
         $position = $livraison->getPosition();
 
         if(!$livraisonParDemande){
-            $position->setReserved(false);
+            $position->setReserved(0);
         }
         $livraison->setPosition(NULL);
 
