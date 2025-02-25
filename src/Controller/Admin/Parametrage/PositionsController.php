@@ -79,7 +79,7 @@ class PositionsController extends AbstractController
             ->leftJoin('p.livraisonStockCabs', 'livs')
             ->groupBy('p.id');
         if (!empty($search)) {
-            $queryBuilder->andWhere('(p.position)')
+            $queryBuilder->andWhere('p.position LIKE :search')
                 ->setParameter('search', "%$search%");
         }
 
